@@ -29,7 +29,7 @@ const upload = multer({
 });
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'Public')));
 app.use('/uploads', express.static(UPLOAD_DIR));
 
 function readPhotos() { return JSON.parse(fs.readFileSync(META_FILE, 'utf8')); }
