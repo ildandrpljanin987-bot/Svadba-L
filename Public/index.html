@@ -3,17 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Lamija & Nedim</title>
 
 <style>
 *{
     box-sizing:border-box;
-    margin:0;
-    padding:0;
 }
 
 body{
+    margin:0;
     font-family:Georgia,serif;
     background:#f6f0e5;
     color:#4a4035;
@@ -25,60 +23,63 @@ body{
     align-items:center;
     justify-content:center;
     text-align:center;
-    padding:30px;
-    background:
-        radial-gradient(circle at top,#fffaf0 0%,#f6f0e5 55%,#eee3d1 100%);
+    padding:30px 20px;
+    background:linear-gradient(
+        135deg,
+        #fffaf1,
+        #f6f0e5,
+        #eee3d1
+    );
 }
 
 .hero-inner{
-    max-width:900px;
+    max-width:850px;
     width:100%;
 }
 
 .small{
     font-size:15px;
-    letter-spacing:4px;
+    letter-spacing:5px;
     text-transform:uppercase;
     color:#a68a55;
     margin-bottom:20px;
 }
 
 h1{
-    font-size:clamp(52px,10vw,105px);
+    margin:0;
+    font-size:clamp(50px,10vw,100px);
     font-weight:normal;
-    color:#9b7b42;
     line-height:1;
+    color:#9b7b42;
 }
 
 .amp{
-    font-size:.65em;
     color:#b59a69;
 }
 
 .date{
     margin-top:25px;
     font-size:22px;
-    letter-spacing:5px;
+    letter-spacing:6px;
     color:#776650;
 }
 
 .subtitle{
-    margin:30px auto;
     max-width:600px;
+    margin:30px auto;
     font-size:18px;
     line-height:1.7;
 }
 
 .btn{
-    display:inline-block;
-    padding:14px 25px;
-    border:1px solid #b59a69;
+    border:0;
     background:#b59a69;
     color:white;
+    padding:14px 25px;
     border-radius:30px;
-    cursor:pointer;
     font-family:Georgia,serif;
-    transition:.2s;
+    font-size:16px;
+    cursor:pointer;
 }
 
 .btn:hover{
@@ -99,22 +100,21 @@ h2{
     font-size:34px;
     font-weight:normal;
     color:#9b7b42;
-    margin-bottom:15px;
+    margin:0 0 15px;
 }
 
 .section-text{
     text-align:center;
     margin-bottom:35px;
-    color:#776650;
 }
 
 .upload{
-    background:rgba(255,255,255,.55);
+    background:rgba(255,255,255,.5);
     border:1px solid #e1d4bd;
     border-radius:20px;
     padding:35px 20px;
     text-align:center;
-    margin-bottom:50px;
+    margin-bottom:35px;
 }
 
 .upload p{
@@ -129,6 +129,7 @@ h2{
     margin-top:15px;
     font-size:13px;
     color:#8a7a65;
+    line-height:1.7;
 }
 
 .status{
@@ -138,4 +139,986 @@ h2{
 }
 
 .actions{
-    text-align
+    text-align:center;
+    margin-bottom:35px;
+}
+
+.gallery{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:18px;
+}
+
+.card{
+    position:relative;
+    overflow:hidden;
+    border-radius:15px;
+    background:#e8ddca;
+    aspect-ratio:1/1;
+    cursor:pointer;
+}
+
+.card img,
+.card video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+.video-card:after{
+    content:"▶";
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    background:rgba(0,0,0,.6);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    pointer-events:none;
+}
+
+.empty{
+    text-align:center;
+    color:#8a7a65;
+    padding:40px 20px;
+    grid-column:1/-1;
+}
+
+.qrbox{
+    max-width:700px;
+    margin:55px auto 0;
+    background:rgba(255,255,255,.55);
+    border:1px solid #e1d4bd;
+    border-radius:20px;
+    padding:30px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:30px;
+}
+
+.qrbox img{
+    width:180px;
+    height:180px;
+    object-fit:contain;
+}
+
+.qrtext{
+    max-width:350px;
+}
+
+.qrtext h3{
+    color:#9b7b42;
+    font-size:27px;
+    margin:0 0 10px;
+}
+
+.qrtext p{
+    line-height:1.6;
+}
+
+footer{
+    text-align:center;
+    padding:40px 20px;
+    color:#8a7a65;
+}
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(30,25,20,.75);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:1000;
+}
+
+.modal.active{
+    display:flex;
+}
+
+.modal-box{
+    background:#f8f1e6;
+    border-radius:20px;
+    padding:30px;
+    max-width:450px;
+    width:100%;
+    text-align:center;
+}
+
+.modal-box h3{
+    color:#9b7b42;
+    font-size:28px;
+    font-weight:normal;
+}
+
+.pin-input{
+    width:100%;
+    padding:14px;
+    border:1px solid #d6c6ab;
+    border-radius:10px;
+    background:white;
+    font-size:18px;
+    text-align:center;
+    margin:15px 0;
+}
+
+.pin-error{
+    color:#a33;
+    min-height:22px;
+    margin-bottom:10px;
+}
+
+.lightbox{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.92);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    padding:20px;
+    z-index:2000;
+}
+
+.lightbox.active{
+    display:flex;
+}
+
+.lightbox-media{
+    max-width:95vw;
+    max-height:78vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.lightbox-media img,
+.lightbox-media video{
+    max-width:95vw;
+    max-height:78vh;
+    width:auto;
+    height:auto;
+    object-fit:contain;
+    border-radius:8px;
+}
+
+.lightbox-actions{
+    margin-top:20px;
+}
+
+.close{
+    position:absolute;
+    right:20px;
+    top:15px;
+    color:white;
+    font-size:40px;
+    cursor:pointer;
+}
+
+@media(max-width:700px){
+
+    .qrbox{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .gallery{
+        grid-template-columns:repeat(2,1fr);
+        gap:10px;
+    }
+
+    section{
+        padding:50px 15px;
+    }
+
+    .date{
+        font-size:18px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="hero">
+
+    <div class="hero-inner">
+
+        <div class="small">
+            Naše vjenčanje
+        </div>
+
+        <h1>
+            Lamija <span class="amp">&amp;</span> Nedim
+        </h1>
+
+        <div class="date">
+            10.10.2026.
+        </div>
+
+        <p class="subtitle">
+            Dobro došli na našu svadbenu galeriju.<br>
+            Podijelite s nama fotografije i videe
+            koje napravite tokom našeg posebnog dana.
+        </p>
+
+        <a href="#galerija" class="btn">
+            Pogledaj galeriju
+        </a>
+
+    </div>
+
+</div>
+
+
+<section id="galerija">
+
+<div class="container">
+
+    <h2>Podijelite uspomenu</h2>
+
+    <p class="section-text">
+        Odaberite jednu ili više fotografija ili videa sa svog telefona.
+    </p>
+
+    <div class="upload">
+
+        <label class="btn" for="photos">
+            📷 Objavi fotografije ili video
+        </label>
+
+        <input
+            id="photos"
+            type="file"
+            accept="image/*,video/*"
+            multiple
+        >
+
+        <div class="drop">
+            Do 150 fajlova odjednom · fotografije do 50 MB · videi do 500 MB.
+            <br>
+            JPG, PNG, WEBP, GIF, HEIC, HEIF, MP4, MOV, WEBM i M4V.
+        </div>
+
+        <div
+            class="status"
+            id="status"
+        ></div>
+
+    </div>
+
+
+    <!-- QR KOD - NE MIJENJATI -->
+
+    <div class="qrbox">
+
+        <img
+            src="qr.png"
+            alt="QR kod za album"
+        >
+
+        <div class="qrtext">
+
+            <h3>Skeniraj me</h3>
+
+            <p>
+                Sačuvajte ovaj QR kod i podijelite ga
+                sa gostima kako bi svi mogli dodavati
+                svoje fotografije i videe.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <br><br>
+
+
+    <h2>Naše uspomene</h2>
+
+    <div class="actions">
+
+        <button
+            class="btn"
+            type="button"
+            onclick="openPin('all')"
+        >
+            📦 Preuzmi sve
+        </button>
+
+    </div>
+
+
+    <div
+        class="gallery"
+        id="gallery"
+    >
+
+        <div class="empty">
+            Učitavanje galerije...
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<footer>
+    Lamija &amp; Nedim · 10.10.2026.
+</footer>
+
+
+<!-- PIN -->
+
+<div
+    class="modal"
+    id="pinModal"
+>
+
+    <div class="modal-box">
+
+        <h3>Preuzimanje fotografija</h3>
+
+        <p>
+            Unesite PIN za preuzimanje.
+        </p>
+
+        <input
+            class="pin-input"
+            id="pin"
+            type="password"
+            inputmode="numeric"
+            placeholder="PIN"
+            autocomplete="off"
+        >
+
+        <div
+            class="pin-error"
+            id="pinError"
+        ></div>
+
+        <button
+            class="btn"
+            type="button"
+            onclick="confirmPin()"
+        >
+            Preuzmi
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- LIGHTBOX -->
+
+<div
+    class="lightbox"
+    id="lightbox"
+>
+
+    <div
+        class="close"
+        onclick="closeLightbox()"
+    >
+        ×
+    </div>
+
+    <div
+        class="lightbox-media"
+        id="lightboxMedia"
+    ></div>
+
+    <div class="lightbox-actions">
+
+        <button
+            class="btn"
+            type="button"
+            onclick="downloadCurrent()"
+        >
+            📥 Preuzmi
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+let currentKey = null;
+let downloadType = null;
+
+
+/* VIDEO */
+
+function isVideo(name){
+
+    if(!name) return false;
+
+    const n = name.toLowerCase();
+
+    return (
+        n.endsWith(".mp4") ||
+        n.endsWith(".mov") ||
+        n.endsWith(".webm") ||
+        n.endsWith(".m4v")
+    );
+}
+
+
+/* URL */
+
+function makeUrl(key){
+
+    if(!key) return "";
+
+    return "/uploads/" +
+        key
+        .split("/")
+        .map(function(part){
+            return encodeURIComponent(part);
+        })
+        .join("/");
+}
+
+
+/* GALERIJA */
+
+async function loadGallery(){
+
+    const gallery =
+        document.getElementById("gallery");
+
+    try{
+
+        const response =
+            await fetch("/api/photos");
+
+        if(!response.ok){
+            throw new Error("Galerija nije dostupna.");
+        }
+
+        const data =
+            await response.json();
+
+        const photos =
+            Array.isArray(data)
+                ? data
+                : (data.photos || []);
+
+        gallery.innerHTML = "";
+
+        if(photos.length === 0){
+
+            gallery.innerHTML =
+                '<div class="empty">' +
+                'Još nema objavljenih fotografija ili videa.' +
+                '</div>';
+
+            return;
+        }
+
+
+        photos.forEach(function(photo){
+
+            const key =
+                photo.key ||
+                photo.file ||
+                "";
+
+            const url =
+                photo.url ||
+                makeUrl(key);
+
+            const name =
+                photo.name ||
+                key.split("/").pop() ||
+                "uspomena";
+
+            const video =
+                isVideo(name);
+
+            const card =
+                document.createElement("div");
+
+            card.className =
+                video
+                    ? "card video-card"
+                    : "card";
+
+
+            if(video){
+
+                const element =
+                    document.createElement("video");
+
+                element.src = url;
+                element.muted = true;
+                element.playsInline = true;
+                element.preload = "metadata";
+
+                card.appendChild(element);
+
+            }else{
+
+                const element =
+                    document.createElement("img");
+
+                element.src = url;
+                element.alt = "Uspomena";
+                element.loading = "lazy";
+
+                card.appendChild(element);
+
+            }
+
+
+            card.onclick = function(){
+
+                openLightbox(
+                    key,
+                    url,
+                    name,
+                    video
+                );
+
+            };
+
+
+            gallery.appendChild(card);
+
+        });
+
+
+    }catch(error){
+
+        console.error(error);
+
+        gallery.innerHTML =
+            '<div class="empty">' +
+            'Nije moguće učitati galeriju.' +
+            '</div>';
+
+    }
+
+}
+
+
+/* UPLOAD */
+
+document
+.getElementById("photos")
+.addEventListener(
+    "change",
+    async function(){
+
+        const files =
+            Array.from(this.files || []);
+
+        const status =
+            document.getElementById("status");
+
+
+        if(files.length === 0){
+            return;
+        }
+
+
+        if(files.length > 150){
+
+            status.textContent =
+                "Najviše 150 fajlova odjednom.";
+
+            this.value = "";
+
+            return;
+        }
+
+
+        for(let i=0;i<files.length;i++){
+
+            const file = files[i];
+
+            const video =
+                file.type.startsWith("video/") ||
+                isVideo(file.name);
+
+            const limit =
+                video
+                    ? 500 * 1024 * 1024
+                    : 50 * 1024 * 1024;
+
+
+            if(file.size > limit){
+
+                status.textContent =
+                    video
+                    ? "Video " + file.name + " je veći od 500 MB."
+                    : "Fotografija " + file.name + " je veća od 50 MB.";
+
+                this.value = "";
+
+                return;
+            }
+
+        }
+
+
+        const form =
+            new FormData();
+
+
+        files.forEach(function(file){
+
+            form.append(
+                "photos",
+                file
+            );
+
+        });
+
+
+        status.textContent =
+            "Šaljem " + files.length + " fajlova...";
+
+
+        try{
+
+            const response =
+                await fetch(
+                    "/api/upload",
+                    {
+                        method:"POST",
+                        body:form
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if(!response.ok){
+
+                throw new Error(
+                    data.error ||
+                    "Upload nije uspio."
+                );
+
+            }
+
+
+            status.textContent =
+                "Uspješno poslano: " +
+                (data.uploaded || files.length) +
+                " fajlova.";
+
+
+            this.value = "";
+
+            await loadGallery();
+
+
+        }catch(error){
+
+            console.error(error);
+
+            status.textContent =
+                error.message ||
+                "Greška prilikom slanja.";
+
+        }
+
+    }
+);
+
+
+/* LIGHTBOX */
+
+function openLightbox(
+    key,
+    url,
+    name,
+    video
+){
+
+    currentKey = key;
+
+    const box =
+        document.getElementById("lightbox");
+
+    const media =
+        document.getElementById("lightboxMedia");
+
+
+    media.innerHTML = "";
+
+
+    if(video){
+
+        const element =
+            document.createElement("video");
+
+        element.src = url;
+        element.controls = true;
+        element.playsInline = true;
+        element.preload = "metadata";
+
+        media.appendChild(element);
+
+    }else{
+
+        const element =
+            document.createElement("img");
+
+        element.src = url;
+        element.alt = name || "Uspomena";
+
+        media.appendChild(element);
+
+    }
+
+
+    box.classList.add("active");
+
+}
+
+
+function closeLightbox(){
+
+    document
+        .getElementById("lightbox")
+        .classList.remove("active");
+
+    document
+        .getElementById("lightboxMedia")
+        .innerHTML = "";
+
+    currentKey = null;
+
+}
+
+
+/* DOWNLOAD JEDNOG */
+
+function downloadCurrent(){
+
+    if(!currentKey){
+        return;
+    }
+
+    openPin(
+        "one",
+        currentKey
+    );
+
+}
+
+
+/* PIN */
+
+function openPin(
+    type,
+    key
+){
+
+    downloadType = type;
+    currentKey = key || null;
+
+    document
+        .getElementById("pin")
+        .value = "";
+
+    document
+        .getElementById("pinError")
+        .textContent = "";
+
+    document
+        .getElementById("pinModal")
+        .classList.add("active");
+
+}
+
+
+async function confirmPin(){
+
+    const pin =
+        document.getElementById("pin").value;
+
+    const errorBox =
+        document.getElementById("pinError");
+
+
+    if(!pin){
+
+        errorBox.textContent =
+            "Unesite PIN.";
+
+        return;
+    }
+
+
+    errorBox.textContent =
+        "Priprema preuzimanja...";
+
+
+    try{
+
+        let url;
+
+
+        if(downloadType === "all"){
+
+            url =
+                "/api/download-all";
+
+        }else{
+
+            if(!currentKey){
+
+                throw new Error(
+                    "Nije odabran fajl."
+                );
+
+            }
+
+            url =
+                "/api/download?key=" +
+                encodeURIComponent(currentKey);
+
+        }
+
+
+        const response =
+            await fetch(
+                url,
+                {
+                    headers:{
+                        "x-admin-pin":pin
+                    }
+                }
+            );
+
+
+        if(!response.ok){
+
+            let message =
+                "Pogrešan PIN ili greška.";
+
+            try{
+
+                const data =
+                    await response.json();
+
+                if(data.error){
+                    message = data.error;
+                }
+
+            }catch(e){}
+
+            throw new Error(message);
+
+        }
+
+
+        const blob =
+            await response.blob();
+
+
+        const downloadUrl =
+            URL.createObjectURL(blob);
+
+
+        const link =
+            document.createElement("a");
+
+        link.href = downloadUrl;
+
+        link.download =
+            downloadType === "all"
+                ? "lamija-nedim-fotografije.zip"
+                : (
+                    currentKey
+                    ? currentKey.split("/").pop()
+                    : "uspomena"
+                );
+
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        link.remove();
+
+
+        setTimeout(
+            function(){
+                URL.revokeObjectURL(downloadUrl);
+            },
+            1000
+        );
+
+
+        closePin();
+
+
+    }catch(error){
+
+        console.error(error);
+
+        errorBox.textContent =
+            error.message ||
+            "Preuzimanje nije uspjelo.";
+
+    }
+
+}
+
+
+function closePin(){
+
+    document
+        .getElementById("pinModal")
+        .classList.remove("active");
+
+}
+
+
+/* ESC */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key === "Escape"){
+
+            closeLightbox();
+            closePin();
+
+        }
+
+    }
+);
+
+
+/* START */
+
+loadGallery();
+
+</script>
+
+</body>
+</html>
