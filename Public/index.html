@@ -1,73 +1,617 @@
 <!doctype html>
 <html lang="bs">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Lamija & Nedim</title>
-
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lamija & Nedim — Naše uspomene</title>
 <style>
+:root{--cream:#f7f1e8;--paper:#fbf7f0;--gold:#a57932;--ink:#34302a;--line:#c7a66c;--muted:#746d63}
 *{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:Georgia,'Times New Roman',serif}
+.wrap{max-width:920px;margin:auto;padding:22px 16px 60px}
+.card{background:rgba(251,247,240,.96);border:1px solid var(--line);box-shadow:0 12px 40px rgba(70,50,20,.08);position:relative}
+.hero{text-align:center;padding:52px 24px 35px}
+.kicker{letter-spacing:.36em;text-transform:uppercase;font-size:12px;color:#635a4f}
+.names{font-size:clamp(48px,9vw,92px);line-height:.95;color:var(--gold);font-style:italic;margin:18px 0}
+.date{letter-spacing:.3em;color:#655b4e;font-size:14px}
+.heart{color:var(--gold);font-size:30px;margin:12px}
+.content{padding:10px 24px 40px}
+.intro{text-align:center;max-width:650px;margin:0 auto 28px;font-size:18px;line-height:1.65}
+.divider{text-align:center;color:var(--gold);margin:18px 0 28px}
+.upload{border:1px dashed var(--line);background:#fffaf3;border-radius:12px;padding:24px;text-align:center}
+.upload h2{font-weight:400;letter-spacing:.12em;text-transform:uppercase;font-size:20px}
+.upload p{color:var(--muted)}
+.btn,.small-btn,.lightbox-btn{border:1px solid var(--gold);background:var(--gold);color:#fff;padding:11px 18px;border-radius:30px;font-family:inherit;cursor:pointer}
+.drop,.status{margin-top:12px;color:var(--muted);font-size:13px;min-height:20px}
+input[type=file]{display:none}
+.qrbox{display:flex;align-items:center;gap:24px;justify-content:center;margin:28px auto 36px}
+.qrbox img{width:140px;height:140px;background:white;padding:9px;border:1px solid var(--line)}
+.qrtext{max-width:320px}
+.qrtext h3{color:var(--gold);font-weight:400;font-size:24px}
+.qrtext p{line-height:1.55;color:var(--muted)}
+.gallery-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:34px 0 15px}
+.gallery-head h2{font-weight:400;font-size:27px;margin:0;color:var(--gold)}
+.count{font-size:13px;color:var(--muted)}
+.gallery{columns:3 180px;column-gap:12px}
+.photo{break-inside:avoid;margin:0 0 12px;border:1px solid rgba(165,121,50,.35);background:white;padding:5px;cursor:pointer}
+.photo img{display:block;width:100%}
+.photo video{display:block;width:100%;height:auto}
+.empty{text-align:center;color:var(--muted);padding:35px;border:1px dashed #d3c09d}
+.lightbox{position:fixed;inset:0;background:rgba(20,17,13,.88);display:none;align-items:center;justify-content:center;padding:20px;z-index:20}
+.lightbox.show{display:flex}
+.lightbox img{max-width:96vw;max-height:82vh}
+.lightbox video{max-width:96vw;max-height:82vh}
+.close{position:absolute;right:20px;top:14px;color:#fff;background:none;border:0;font-size:34px}
+.lightbox-actions{position:absolute;bottom:18px}
+.modal{position:fixed;inset:0;background:rgba(20,17,13,.65);display:none;align-items:center;justify-content:center;padding:20px;z-index:40}
+.modal.show{display:flex}
+.modal-card{width:min(390px,100%);background:var(--paper);border:1px solid var(--line);padding:28px;border-radius:14px;text-align:center}
+.modal-card h3{font-weight:400;color:var(--gold)}
+.modal-card p{color:var(--muted)}
+.pin-input{width:100%;padding:13px;border:1px solid var(--line);border-radius:9px;text-align:center;font-size:18px}
+.modal-actions{display:flex;gap:9px;justify-content:center;margin-top:16px}
+.pin-cancel{background:transparent;color:var(--gold);border:1px solid var(--gold);padding:11px 18px;border-radius:22px}
+footer{text-align:center;color:var(--muted);font-size:13px;margin-top:24px}
 
-html{
-  scroll-behavior:smooth;
+@media(max-width:620px){
+.hero{padding:42px 18px 28px}
+.content{padding:10px 15px 30px}
+.qrbox{flex-direction:column;text-align:center}
+.gallery{columns:2 130px}
+.names{font-size:55px}
+.gallery-head{align-items:flex-start;flex-direction:column}
 }
 
-body{
-  margin:0;
-  background:#f7f0e4;
-  color:#87683e;
-  font-family:Georgia,serif;
+.welcome{position:fixed;inset:0;z-index:50;background:#f7f1e8;display:flex;align-items:center;justify-content:center;padding:22px}
+.welcome-card{width:min(560px,100%);min-height:690px;border:1px solid var(--line);background:var(--paper);display:flex;align-items:center;justify-content:center;text-align:center;padding:45px 25px}
+.welcome-inner{position:relative}
+.welcome-kicker{font-size:12px;letter-spacing:.35em;color:#635a4f}
+.welcome-names{font-size:clamp(54px,12vw,92px);color:var(--gold);font-style:italic;margin:24px 0 18px}
+.welcome-heart{font-size:38px;color:var(--gold)}
+.welcome-date{font-size:14px;letter-spacing:.28em;color:#655b4e;margin:20px 0 45px}
+.welcome-text{font-size:18px;line-height:1.65;max-width:390px;margin:0 auto 30px}
+.welcome-btn{border:1px solid var(--gold);background:var(--gold);color:#fff;padding:14px 30px;border-radius:30px;font-family:inherit;font-size:16px}
+.welcome-small{margin-top:18px;color:var(--muted);font-size:12px}
+</style>
+</head>
+
+<body>
+
+<div class="welcome" id="welcome">
+<div class="welcome-card">
+<div class="welcome-inner">
+
+<div class="welcome-kicker">Naše vjenčanje</div>
+<div class="welcome-names">Lamija &amp; Nedim</div>
+<div class="welcome-heart">♡</div>
+<div class="welcome-date">10. 10. 2026.</div>
+
+<p class="welcome-text">
+Dobro došli u naš zajednički album.
+Podijelite fotografije i videe koje ste zabilježili
+na našem posebnom danu.
+</p>
+
+<button class="welcome-btn" id="openAlbum">
+♡ &nbsp; Otvori album
+</button>
+
+<div class="welcome-small">
+Podijelite uspomenu sa nama
+</div>
+
+</div>
+</div>
+</div>
+
+<div class="wrap">
+
+<main class="card">
+
+<section class="hero">
+
+<div class="kicker">
+Naše vjenčanje
+</div>
+
+<div class="names">
+Lamija &amp; Nedim
+</div>
+
+<div class="heart">
+♡
+</div>
+
+<div class="date">
+10. 10. 2026.
+</div>
+
+</section>
+
+<section class="content">
+
+<p class="intro">
+Hvala što ste dio našeg posebnog dana.
+Podijelite s nama fotografije i videe koje ste zabilježili
+na našem vjenčanju i dodajte ih u naš zajednički album.
+</p>
+
+<div class="divider">
+♡
+</div>
+
+<div class="upload">
+
+<h2>
+Podijelite uspomenu
+</h2>
+
+<p>
+Odaberite jednu ili više fotografija ili videa sa svog telefona.
+</p>
+
+<label class="btn" for="photos">
+📷 Objavi fotografije i videe
+</label>
+
+<input
+id="photos"
+type="file"
+accept="image/*,video/mp4,video/quicktime,video/webm,video/x-m4v"
+multiple
+>
+
+<div class="drop">
+Do 150 datoteka odjednom · fotografije do 50 MB · videi do 500 MB.
+</div>
+
+<div class="status" id="status"></div>
+
+</div>
+
+<div class="qrbox">
+
+<img
+src="qr.png"
+alt="QR kod za album"
+>
+
+<div class="qrtext">
+
+<h3>
+Skeniraj me
+</h3>
+
+<p>
+Sačuvajte ovaj QR kod i podijelite ga sa gostima
+kako bi svi mogli dodavati svoje fotografije i videe.
+</p>
+
+</div>
+
+</div>
+
+<div class="gallery-head">
+
+<div>
+
+<h2>
+Naše uspomene
+</h2>
+
+<div class="count" id="count">
+0 uspomena
+</div>
+
+</div>
+
+<button class="small-btn" id="downloadAll">
+📦 Preuzmi sve
+</button>
+
+</div>
+
+<div id="gallery" class="gallery">
+
+<div class="empty">
+Učitavanje fotografija…
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+<footer>
+Lamija &amp; Nedim · 10. 10. 2026.
+</footer>
+
+</div>
+
+<div class="lightbox" id="lightbox">
+
+<button class="close" id="close">
+×
+</button>
+
+<img
+id="big"
+alt="Uspomena sa svadbe"
+>
+
+<div class="lightbox-actions">
+
+<button class="lightbox-btn" id="downloadOne">
+📥 Preuzmi uspomenu
+</button>
+
+</div>
+
+</div>
+
+<div class="modal" id="pinModal">
+
+<div class="modal-card">
+
+<h3>
+Preuzimanje fotografija
+</h3>
+
+<p>
+Unesite PIN za preuzimanje.
+</p>
+
+<input
+class="pin-input"
+id="pin"
+type="password"
+inputmode="numeric"
+maxlength="32"
+placeholder="PIN"
+>
+
+<div class="modal-actions">
+
+<button class="pin-cancel" id="pinCancel">
+Otkaži
+</button>
+
+<button class="btn" id="pinOk">
+Nastavi
+</button>
+
+</div>
+
+<div class="status" id="pinStatus"></div>
+
+</div>
+
+</div>
+
+<script>
+
+document.getElementById('openAlbum').onclick=()=>{
+document.getElementById('welcome').style.display='none';
+};
+
+const input=document.getElementById('photos'),
+statusEl=document.getElementById('status'),
+gallery=document.getElementById('gallery'),
+count=document.getElementById('count'),
+lightbox=document.getElementById('lightbox');
+
+let big=document.getElementById('big');
+
+const pinModal=document.getElementById('pinModal'),
+pin=document.getElementById('pin'),
+pinStatus=document.getElementById('pinStatus');
+
+let selectedKey='';
+
+const photoUrl=k=>
+'/uploads/'+String(k).split('/').map(encodeURIComponent).join('/');
+
+const mediaIsVideo=p=>
+/\.(mp4|mov|webm|m4v)(\?|$)/i.test(
+String(p.key||p.file||p.url||'')+' '+String(p.name||'')
+);
+
+const mediaUrl=p=>
+p.url||photoUrl(p.key||p.file||'');
+
+function openPin(action,key=''){
+selectedKey=key;
+pinModal.dataset.action=action;
+pin.value='';
+pinStatus.textContent='';
+pinModal.classList.add('show');
+setTimeout(()=>pin.focus(),100);
 }
 
-.page{
-  padding:14px;
-  min-height:100vh;
+function closePin(){
+pinModal.classList.remove('show');
 }
 
-.frame{
-  position:relative;
-  overflow:hidden;
-  min-height:calc(100vh - 28px);
-  border:1px solid #c4a46d;
-  border-radius:22px;
-  background:#f7f0e4;
+async function doDownload(p,action,key){
+
+const url=
+action==='all'
+?'/api/download-all'
+:'/api/download?key='+encodeURIComponent(key);
+
+const r=await fetch(url,{
+headers:{
+'x-admin-pin':p
+}
+});
+
+if(!r.ok){
+
+let j={};
+
+try{
+j=await r.json();
+}catch{}
+
+throw Error(j.error||'Pogrešan PIN.');
 }
 
-.hero{
-  min-height:calc(100vh - 28px);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:55px 18px;
-  position:relative;
+const blob=await r.blob();
+
+const a=document.createElement('a');
+
+a.href=URL.createObjectURL(blob);
+
+a.download=
+action==='all'
+?'lamija-nedim-fotografije.zip'
+:(key.split('/').pop()||'fotografija.jpg');
+
+a.click();
+
+setTimeout(()=>{
+URL.revokeObjectURL(a.href);
+},1000);
+
 }
 
-.content{
-  position:relative;
-  z-index:2;
-  width:min(900px,100%);
+async function load(){
+
+try{
+
+const r=await fetch('/api/photos',{
+cache:'no-store'
+});
+
+if(!r.ok)
+throw Error('HTTP '+r.status);
+
+const data=await r.json();
+
+const photos=
+Array.isArray(data)
+?data
+:(data.photos||data.files||[]);
+
+count.textContent=
+photos.length+' uspomena';
+
+if(!photos.length){
+
+gallery.innerHTML=
+'<div class="empty">Još nema objavljenih uspomena. Budite prvi koji će dodati uspomenu. ♡</div>';
+
+return;
 }
 
-.small{
-  font-size:clamp(14px,2vw,20px);
-  letter-spacing:.32em;
-  margin:0 0 18px;
-  color:#80623b;
+gallery.innerHTML=photos.map(p=>{
+
+const u=mediaUrl(p),
+k=p.key||p.file||'';
+
+if(mediaIsVideo(p)){
+
+return `
+<figure class="photo">
+<video
+loading="lazy"
+muted
+preload="metadata"
+src="${u}"
+style="display:block;width:100%;height:auto"
+></video>
+
+<div style="padding:5px;text-align:center;color:var(--muted);font-size:12px">
+▶ VIDEO
+</div>
+
+</figure>
+`;
+
+}else{
+
+return `
+<figure class="photo">
+<img
+loading="lazy"
+src="${u}"
+data-key="${encodeURIComponent(k)}"
+alt="Uspomena"
+>
+</figure>
+`;
+
 }
 
-.names{
-  font-family:"Brush Script MT","Segoe Script","URW Chancery L",cursive;
-  font-size:clamp(60px,10vw,125px);
-  font-weight:400;
-  line-height:1;
-  color:#b3935c;
-  margin:0;
+}).join('');
+
+document.querySelectorAll('.photo').forEach((el,i)=>{
+
+el.onclick=()=>{
+
+const p=photos[i],
+u=mediaUrl(p);
+
+selectedKey=
+p.key||p.file||'';
+
+if(mediaIsVideo(p)){
+
+big.outerHTML=
+'<video id="big" controls autoplay playsinline style="max-width:96vw;max-height:82vh"></video>';
+
+big=document.getElementById('big');
+
+big.src=u;
+
+}else{
+
+big.outerHTML=
+'<img id="big" alt="Uspomena sa svadbe">';
+
+big=document.getElementById('big');
+
+big.src=u;
+
 }
 
-.orn{
-  display:flex;
-  align-items:center;
-  gap:16px;
-  width:min(520px,90%);
- 
+lightbox.classList.add('show');
+
+};
+
+});
+
+}catch(e){
+
+gallery.innerHTML=
+'<div class="empty">Galerija trenutno nije dostupna.</div>';
+
+console.error(e);
+
+}
+
+}
+
+input.onchange=async()=>{
+
+if(!input.files.length)
+return;
+
+if(input.files.length>150){
+
+statusEl.textContent=
+'Najviše 150 datoteka odjednom.';
+
+return;
+
+}
+
+const fd=new FormData();
+
+[...input.files].forEach(f=>
+fd.append('photos',f)
+);
+
+statusEl.textContent=
+'Objavljivanje fotografija i videa…';
+
+try{
+
+const r=await fetch('/api/upload',{
+method:'POST',
+body:fd
+});
+
+const j=await r.json();
+
+if(!r.ok)
+throw Error(j.error||'Greška');
+
+statusEl.textContent=
+'Uspješno dodano '+
+(j.uploaded||j.count||input.files.length)+
+' datoteka. ♡';
+
+input.value='';
+
+load();
+
+}catch(e){
+
+statusEl.textContent=
+e.message||'Nije uspjelo.';
+
+}
+
+};
+
+document.getElementById('close').onclick=()=>{
+lightbox.classList.remove('show');
+};
+
+lightbox.onclick=e=>{
+
+if(e.target===lightbox)
+lightbox.classList.remove('show');
+
+};
+
+document.getElementById('downloadAll').onclick=()=>{
+openPin('all');
+};
+
+document.getElementById('downloadOne').onclick=()=>{
+if(selectedKey)
+openPin('one',selectedKey);
+};
+
+document.getElementById('pinCancel').onclick=
+closePin;
+
+document.getElementById('pinOk').onclick=
+async()=>{
+
+if(!pin.value.trim()){
+
+pinStatus.textContent=
+'Unesite PIN.';
+
+return;
+
+}
+
+pinStatus.textContent=
+'Pripremam preuzimanje…';
+
+try{
+
+await doDownload(
+pin.value.trim(),
+pinModal.dataset.action,
+selectedKey
+);
+
+closePin();
+
+}catch(e){
+
+pinStatus.textContent=
+e.message||'Preuzimanje nije uspjelo.';
+
+}
+
+};
+
+pin.addEventListener('keydown',e=>{
+
+if(e.key==='Enter')
+document.getElementById('pinOk').click();
+
+});
+
+load();
+
+</script>
+
+</body>
+</html>
