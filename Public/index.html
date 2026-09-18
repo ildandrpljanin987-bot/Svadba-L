@@ -11,244 +11,340 @@
 html,body{
     margin:0;
     padding:0;
-    background:#f7f0e4;
-    color:#574d42;
+    min-height:100%;
+    background:#f8f1e5;
+    color:#51483e;
     font-family:Georgia,"Times New Roman",serif;
 }
 
-body{overflow-x:hidden}
+body{
+    overflow-x:hidden;
+}
+
+/* =========================
+   POČETNA
+========================= */
 
 .hero{
-    min-height:100vh;
+    min-height:100svh;
     padding:18px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    background:#f8f1e5;
 }
 
 .frame{
     position:relative;
     width:100%;
-    min-height:calc(100vh - 36px);
-    border:2px solid #b99a62;
-    border-radius:18px;
+    min-height:calc(100svh - 36px);
     overflow:hidden;
-    background:#f7f0e4;
-    text-align:center;
+    border:2px solid #b99b67;
+    border-radius:18px;
+    background:
+        radial-gradient(
+            ellipse at center,
+            rgba(255,255,255,.42) 0%,
+            rgba(248,241,229,0) 65%
+        ),
+        #f8f1e5;
 }
 
-.content{
+/* =========================
+   CVJETNE GRANE
+========================= */
+
+.botanical{
+    position:absolute;
+    width:390px;
+    height:650px;
+    z-index:1;
+    pointer-events:none;
+    opacity:.82;
+}
+
+.botanical.left{
+    left:-65px;
+    top:-25px;
+}
+
+.botanical.right{
+    right:-65px;
+    bottom:-35px;
+    transform:scaleX(-1);
+}
+
+.botanical svg{
+    width:100%;
+    height:100%;
+    overflow:visible;
+}
+
+/* =========================
+   SADRŽAJ
+========================= */
+
+.hero-content{
     position:relative;
     z-index:3;
-    min-height:calc(100vh - 40px);
-    padding:90px 20px 30px;
+    min-height:calc(100svh - 40px);
+    padding:85px 25px 25px;
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:center;
+    text-align:center;
 }
 
-.small{
+.eyebrow{
+    color:#4f4840;
     font-size:24px;
-    letter-spacing:8px;
-    margin-bottom:25px;
+    letter-spacing:9px;
+    margin-bottom:23px;
 }
 
 .names{
     margin:0;
-    color:#9b722f;
-    font-family:"Brush Script MT","Segoe Script",cursive;
-    font-size:clamp(70px,9vw,135px);
+    color:#9b702d;
+    font-family:"Brush Script MT","Segoe Script","URW Chancery L",cursive;
     font-weight:400;
+    font-size:clamp(72px,8vw,132px);
     line-height:.9;
+    letter-spacing:-4px;
+    white-space:nowrap;
 }
 
-.line{
-    width:min(600px,65%);
+.heart-row{
+    width:min(540px,44%);
+    min-width:300px;
     display:flex;
     align-items:center;
-    gap:20px;
-    margin:30px auto 18px;
+    gap:24px;
+    margin-top:34px;
 }
 
-.line:before,.line:after{
+.heart-row::before,
+.heart-row::after{
     content:"";
-    height:1.5px;
-    background:#b99a62;
     flex:1;
+    height:2px;
+    background:#c4a875;
 }
 
 .heart{
-    color:#9b722f;
-    font-size:50px;
+    color:#9b702d;
+    font-family:Arial,sans-serif;
+    font-size:58px;
+    line-height:1;
+    font-weight:300;
 }
 
 .date{
-    font-size:31px;
-    letter-spacing:10px;
-    margin-bottom:38px;
+    margin-top:20px;
+    color:#51483e;
+    font-size:30px;
+    letter-spacing:13px;
 }
 
-.text{
-    font-size:23px;
-    line-height:1.55;
+.welcome{
+    margin:43px 0 31px;
     max-width:760px;
-    margin:0 0 32px;
+    color:#51483e;
+    font-size:24px;
+    line-height:1.55;
 }
 
-.open{
-    border:0;
-    background:#9b722f;
-    color:white;
-    border-radius:50px;
-    width:360px;
+.gallery-open{
+    width:370px;
     max-width:80%;
-    height:78px;
+    height:80px;
+    border:0;
+    border-radius:50px;
+    background:#9a702e;
+    color:white;
     font-family:Georgia,"Times New Roman",serif;
-    font-size:23px;
+    font-size:24px;
     cursor:pointer;
+    box-shadow:0 4px 10px rgba(100,70,30,.12);
+}
+
+.gallery-open:hover{
+    filter:brightness(.96);
+}
+
+.camera{
+    font-size:29px;
+    margin-right:13px;
 }
 
 .arrow{
-    color:#9b722f;
+    color:#9a702e;
     font-size:38px;
-    margin-top:20px;
+    margin-top:24px;
 }
 
-/* dekoracije */
-.decor{
-    position:absolute;
-    z-index:1;
-    width:270px;
-    height:500px;
-    opacity:.7;
-}
 
-.left{left:-55px;top:20px}
-.right{right:-55px;bottom:-30px;transform:scaleX(-1) rotate(10deg)}
-
-.stem{
-    position:absolute;
-    width:230px;
-    height:2px;
-    background:#a9ad96;
-    left:0;
-    top:180px;
-    transform:rotate(-50deg);
-    transform-origin:left;
-}
-
-.leaf{
-    position:absolute;
-    width:75px;
-    height:35px;
-    border-radius:100% 0 100% 0;
-    background:#c5cab5;
-}
-
-.l1{left:35px;top:100px;transform:rotate(-55deg)}
-.l2{left:95px;top:125px;transform:rotate(-20deg)}
-.l3{left:25px;top:190px;transform:rotate(-65deg)}
-.l4{left:105px;top:220px;transform:rotate(-5deg)}
-.l5{left:50px;top:290px;transform:rotate(-65deg)}
-.l6{left:120px;top:330px;transform:rotate(5deg)}
-.l7{left:45px;top:395px;transform:rotate(-60deg)}
-
-.flower{
-    position:absolute;
-    width:32px;
-    height:32px;
-    border-radius:50%;
-    background:#eee8d8;
-    border:2px solid #c5a66f;
-}
-
-.f1{left:80px;top:135px}
-.f2{left:35px;top:250px}
-.f3{left:100px;top:355px}
-
-/* GALERIJA */
+/* =========================
+   GALERIJA
+========================= */
 
 #gallery{
     display:none;
     min-height:100vh;
     padding:35px 20px 60px;
+    background:#f8f1e5;
 }
 
 .gallery-inner{
+    width:100%;
     max-width:1200px;
     margin:auto;
 }
 
-h2{
-    color:#95702f;
+.gallery-title{
+    margin:0;
     text-align:center;
-    font-size:40px;
+    color:#94702e;
+    font-size:42px;
 }
 
-.subtitle{
+.gallery-subtitle{
     text-align:center;
     font-size:18px;
+    margin:10px 0 28px;
 }
 
-.buttons{
+.gallery-actions{
     display:flex;
     justify-content:center;
-    gap:12px;
+    align-items:center;
     flex-wrap:wrap;
-    margin:25px 0;
+    gap:12px;
+    margin-bottom:25px;
 }
 
 .btn{
     border:0;
     border-radius:30px;
-    background:#9b722f;
-    color:white;
-    padding:14px 25px;
+    padding:14px 24px;
+    background:#9a702e;
+    color:#fff;
     font-family:Georgia,"Times New Roman",serif;
     font-size:17px;
     cursor:pointer;
 }
 
-#photos{display:none}
+#photos{
+    display:none;
+}
 
-.upload{
-    max-width:800px;
-    margin:auto;
-    padding:25px;
-    border:1px solid #c5aa76;
-    border-radius:18px;
+.upload-box{
+    max-width:850px;
+    margin:0 auto 30px;
+    padding:24px;
     text-align:center;
+    border:1px solid #c4a875;
+    border-radius:18px;
     background:rgba(255,255,255,.45);
 }
 
+.upload-box p{
+    margin:7px 0;
+}
+
 .status{
+    min-height:22px;
     margin-top:15px;
+    color:#80602b;
     font-weight:bold;
 }
 
-.grid{
-    margin-top:30px;
+.photo-grid{
     display:grid;
     grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
     gap:15px;
 }
 
-.card{
+.photo-card{
     overflow:hidden;
-    border-radius:15px;
     background:white;
+    border-radius:15px;
+    box-shadow:0 3px 13px rgba(0,0,0,.09);
 }
 
-.card img,.card video{
+.photo-card img,
+.photo-card video{
+    display:block;
     width:100%;
     height:260px;
-    display:block;
     object-fit:cover;
+    background:#eee;
 }
 
 .download{
     width:100%;
-    border:0;
     padding:12px;
-    background:#9b722
+    border:0;
+    background:#9a702e;
+    color:#fff;
+    cursor:pointer;
+}
+
+
+/* =========================
+   QR
+========================= */
+
+.qrbox{
+    max-width:700px;
+    margin:45px auto 0;
+    padding:25px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:25px;
+    border:1px solid #c4a875;
+    border-radius:18px;
+    background:rgba(255,255,255,.45);
+}
+
+.qrbox img{
+    width:180px;
+    height:180px;
+    object-fit:contain;
+}
+
+.qrtext h3{
+    margin-top:0;
+    color:#94702e;
+}
+
+
+/* =========================
+   PIN
+========================= */
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:100;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:rgba(0,0,0,.55);
+}
+
+.modal-box{
+    width:100%;
+    max-width:380px;
+    padding:30px;
+    border-radius:20px;
+    background:#f8f1e5;
+    text-align:center;
+}
+
+.modal-box h2{
+    color:#94702e;
+}
+
+.modal-box input{
+    width:100%;
+    padding:14px;
+    margin:
