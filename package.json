@@ -2,7 +2,6 @@
   "name": "lamija-nedim-svadba-gallery",
   "version": "1.1.0",
   "private": true,
-  "description": "Zajednicka galerija fotografija sa svadbe Lamije i Nedima",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
