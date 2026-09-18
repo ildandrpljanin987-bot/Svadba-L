@@ -19,83 +19,168 @@ html{
 
 body{
     font-family:Georgia,"Times New Roman",serif;
-    background:#f6f0e5;
-    color:#4a4035;
+    background:#f7f0e4;
+    color:#4d4032;
 }
 
-/* HERO */
+/* =========================
+   POČETNA STRANICA
+========================= */
 
 .hero{
     min-height:100vh;
+    padding:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#f7f0e4;
+}
+
+.hero-frame{
+    position:relative;
+    width:100%;
+    min-height:calc(100vh - 40px);
+    border:2px solid #b89a65;
+    border-radius:12px;
+    overflow:hidden;
     display:flex;
     align-items:center;
     justify-content:center;
     text-align:center;
-    padding:30px 20px;
     background:
-        radial-gradient(circle at top,#fffaf2 0%,#f6f0e5 55%,#eee3d1 100%);
+        radial-gradient(
+            circle at 50% 40%,
+            #fffaf1 0%,
+            #f8f0e3 55%,
+            #f0e4d0 100%
+        );
 }
 
-.hero-inner{
+/* cvjetni ukrasi */
+
+.hero-frame:before,
+.hero-frame:after{
+    content:"";
+    position:absolute;
+    width:300px;
+    height:500px;
+    opacity:.65;
+    pointer-events:none;
+}
+
+.hero-frame:before{
+    left:-80px;
+    top:0;
+    background:
+        radial-gradient(ellipse at 35% 20%,#d9dfc9 0 18px,transparent 19px),
+        radial-gradient(ellipse at 20% 30%,#c8d1b7 0 24px,transparent 25px),
+        radial-gradient(ellipse at 42% 40%,#d5dcc6 0 20px,transparent 21px),
+        radial-gradient(ellipse at 25% 52%,#c5ceb5 0 25px,transparent 26px),
+        radial-gradient(ellipse at 50% 60%,#d7ddc9 0 22px,transparent 23px);
+    transform:rotate(-20deg);
+}
+
+.hero-frame:after{
+    right:-80px;
+    bottom:-20px;
+    background:
+        radial-gradient(ellipse at 65% 25%,#d9dfc9 0 20px,transparent 21px),
+        radial-gradient(ellipse at 80% 35%,#c8d1b7 0 25px,transparent 26px),
+        radial-gradient(ellipse at 58% 48%,#d5dcc6 0 21px,transparent 22px),
+        radial-gradient(ellipse at 75% 60%,#c5ceb5 0 25px,transparent 26px),
+        radial-gradient(ellipse at 50% 70%,#d7ddc9 0 22px,transparent 23px);
+    transform:rotate(-20deg);
+}
+
+.hero-content{
+    position:relative;
+    z-index:2;
     max-width:900px;
-    width:100%;
+    padding:40px 20px;
 }
 
-.small{
-    font-size:15px;
-    letter-spacing:5px;
+.small-title{
+    color:#665747;
+    font-size:clamp(16px,2vw,25px);
+    letter-spacing:9px;
     text-transform:uppercase;
-    color:#a68a55;
-    margin-bottom:22px;
+    margin-bottom:25px;
 }
 
-h1{
-    font-size:clamp(52px,10vw,105px);
+.names{
+    color:#a37832;
+    font-family:"Brush Script MT","Segoe Script",cursive;
+    font-size:clamp(65px,10vw,145px);
     font-weight:normal;
-    color:#9b7b42;
+    line-height:.95;
+    white-space:nowrap;
+}
+
+.heart-line{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:25px;
+    margin:30px 0;
+}
+
+.heart-line span{
+    width:220px;
+    max-width:25vw;
+    height:2px;
+    background:#c9ad7d;
+}
+
+.heart{
+    color:#a37832;
+    font-size:58px;
     line-height:1;
 }
 
-.amp{
-    color:#b59a69;
-}
-
 .date{
-    margin-top:25px;
-    font-size:22px;
-    letter-spacing:6px;
-    color:#776650;
+    color:#665747;
+    font-size:clamp(20px,3vw,32px);
+    letter-spacing:10px;
+    margin-bottom:35px;
 }
 
-.subtitle{
-    margin:30px auto;
-    max-width:620px;
-    font-size:18px;
-    line-height:1.7;
+.welcome{
+    font-size:clamp(18px,2.2vw,28px);
+    line-height:1.55;
+    max-width:700px;
+    margin:0 auto 35px;
 }
 
 .btn{
     display:inline-block;
-    padding:14px 25px;
-    border:1px solid #b59a69;
-    background:#b59a69;
-    color:white;
-    border-radius:30px;
-    cursor:pointer;
+    border:none;
+    background:#b18439;
+    color:#fff;
+    padding:16px 38px;
+    border-radius:35px;
     font-family:Georgia,"Times New Roman",serif;
-    font-size:16px;
+    font-size:18px;
     text-decoration:none;
+    cursor:pointer;
     transition:.2s;
 }
 
 .btn:hover{
-    background:#967c4f;
+    background:#946d2e;
 }
 
-/* SECTION */
+.arrow{
+    margin-top:25px;
+    color:#a37832;
+    font-size:35px;
+}
+
+/* =========================
+   SEKCIJE
+========================= */
 
 section{
-    padding:70px 20px;
+    padding:80px 20px;
 }
 
 .container{
@@ -103,64 +188,97 @@ section{
     margin:auto;
 }
 
-h2{
+.section-title{
     text-align:center;
-    font-size:34px;
+    color:#8e6b36;
+    font-size:38px;
     font-weight:normal;
-    color:#9b7b42;
+    letter-spacing:4px;
     margin-bottom:15px;
 }
 
 .section-text{
     text-align:center;
+    color:#6f6253;
+    font-size:18px;
     margin-bottom:35px;
-    color:#776650;
 }
 
-/* UPLOAD */
+/* =========================
+   UPLOAD
+========================= */
 
 .upload{
-    background:rgba(255,255,255,.55);
-    border:1px solid #e1d4bd;
-    border-radius:20px;
-    padding:35px 20px;
     text-align:center;
-    margin-bottom:50px;
-}
-
-.upload h2{
-    margin-bottom:10px;
-}
-
-.upload p{
-    margin:10px 0 20px;
+    padding:40px 20px;
+    border:1px dashed #c4a773;
+    border-radius:18px;
+    background:rgba(255,255,255,.35);
 }
 
 .upload input{
     display:none;
 }
 
-.drop{
-    margin-top:15px;
-    font-size:13px;
+.upload-info{
+    margin-top:18px;
+    color:#85735c;
+    font-size:14px;
     line-height:1.7;
-    color:#8a7a65;
 }
 
 .status{
+    min-height:25px;
     margin-top:15px;
-    min-height:22px;
-    color:#9b7b42;
+    color:#9b7437;
 }
 
-/* GALLERY ACTIONS */
+/* =========================
+   QR
+========================= */
 
-.actions{
+.qrbox{
+    max-width:750px;
+    margin:50px auto;
+    padding:30px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:35px;
+    background:rgba(255,255,255,.42);
+    border-radius:20px;
+    border:1px solid #e1d3bc;
+}
+
+.qrbox img{
+    width:180px;
+    height:180px;
+    object-fit:contain;
+}
+
+.qrtext{
+    max-width:380px;
+}
+
+.qrtext h3{
+    color:#8e6b36;
+    font-size:28px;
+    margin-bottom:12px;
+    letter-spacing:4px;
+}
+
+.qrtext p{
+    line-height:1.7;
+}
+
+/* =========================
+   GALERIJA
+========================= */
+
+.gallery-actions{
     text-align:center;
     margin-bottom:35px;
 }
-
-/* GALLERY */
 
 .gallery{
     display:grid;
@@ -170,10 +288,10 @@ h2{
 
 .card{
     position:relative;
+    aspect-ratio:1/1;
     overflow:hidden;
     border-radius:15px;
-    background:#e8ddca;
-    aspect-ratio:1/1;
+    background:#e9dfcf;
     cursor:pointer;
 }
 
@@ -185,78 +303,44 @@ h2{
     display:block;
 }
 
-.video-card::after{
+.video-card:after{
     content:"▶";
     position:absolute;
     left:50%;
     top:50%;
     transform:translate(-50%,-50%);
-    width:55px;
-    height:55px;
-    border-radius:50%;
-    background:rgba(0,0,0,.55);
-    color:white;
+    width:58px;
+    height:58px;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:21px;
+    border-radius:50%;
+    background:rgba(0,0,0,.6);
+    color:#fff;
+    font-size:22px;
     pointer-events:none;
 }
 
 .empty{
-    text-align:center;
-    color:#8a7a65;
-    padding:30px;
     grid-column:1/-1;
+    text-align:center;
+    padding:50px 20px;
+    color:#85735c;
 }
 
-/* QR
-   OVAJ DIO NE MIJENJATI
-*/
-
-.qrbox{
-    max-width:700px;
-    margin:60px auto 0;
-    background:rgba(255,255,255,.55);
-    border:1px solid #e1d4bd;
-    border-radius:20px;
-    padding:30px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:30px;
-}
-
-.qrbox img{
-    width:180px;
-    height:180px;
-    object-fit:contain;
-}
-
-.qrtext{
-    max-width:350px;
-}
-
-.qrtext h3{
-    color:#9b7b42;
-    font-size:27px;
-    margin-bottom:10px;
-}
-
-.qrtext p{
-    line-height:1.6;
-}
-
-/* FOOTER */
+/* =========================
+   FOOTER
+========================= */
 
 footer{
     text-align:center;
-    padding:40px 20px;
-    color:#8a7a65;
-    font-size:14px;
+    padding:45px 20px;
+    color:#85735c;
 }
 
-/* PIN MODAL */
+/* =========================
+   PIN
+========================= */
 
 .modal{
     position:fixed;
@@ -274,40 +358,41 @@ footer{
 }
 
 .modal-box{
+    width:100%;
+    max-width:450px;
     background:#f8f1e6;
     border-radius:20px;
-    padding:30px;
-    max-width:450px;
-    width:100%;
+    padding:35px;
     text-align:center;
 }
 
 .modal-box h3{
-    color:#9b7b42;
+    color:#8e6b36;
     font-size:28px;
-    margin-bottom:15px;
     font-weight:normal;
+    margin-bottom:15px;
 }
 
 .pin-input{
     width:100%;
     padding:14px;
-    border:1px solid #d6c6ab;
+    margin:18px 0;
+    border:1px solid #d2c1a6;
     border-radius:10px;
-    background:white;
-    font-size:18px;
     text-align:center;
-    margin:15px 0;
+    font-size:20px;
     outline:none;
 }
 
 .pin-error{
-    color:#a33;
     min-height:22px;
-    margin-bottom:10px;
+    color:#a33;
+    margin-bottom:12px;
 }
 
-/* LIGHTBOX */
+/* =========================
+   LIGHTBOX
+========================= */
 
 .lightbox{
     position:fixed;
@@ -349,17 +434,57 @@ footer{
 
 .close{
     position:absolute;
-    right:20px;
+    right:25px;
     top:15px;
     color:white;
-    font-size:40px;
+    font-size:45px;
     cursor:pointer;
-    line-height:1;
 }
 
-/* MOBILE */
+/* =========================
+   MOBILNI
+========================= */
 
 @media(max-width:700px){
+
+    .hero{
+        padding:12px;
+    }
+
+    .hero-frame{
+        min-height:calc(100vh - 24px);
+    }
+
+    .small-title{
+        letter-spacing:5px;
+        font-size:14px;
+    }
+
+    .names{
+        font-size:clamp(58px,15vw,90px);
+        white-space:normal;
+    }
+
+    .heart-line{
+        gap:12px;
+    }
+
+    .heart-line span{
+        max-width:25vw;
+    }
+
+    .heart{
+        font-size:45px;
+    }
+
+    .date{
+        letter-spacing:6px;
+        font-size:20px;
+    }
+
+    .welcome{
+        font-size:17px;
+    }
 
     .qrbox{
         flex-direction:column;
@@ -372,74 +497,91 @@ footer{
     }
 
     section{
-        padding:50px 15px;
+        padding:55px 15px;
     }
 
-    .date{
-        font-size:18px;
-    }
-
-    .subtitle{
-        font-size:16px;
-    }
 }
 </style>
 </head>
 
 <body>
 
-<!-- POČETNA STRANICA -->
+<!-- =========================
+     POČETNA
+========================= -->
 
 <div class="hero">
 
-    <div class="hero-inner">
+    <div class="hero-frame">
 
-        <div class="small">
-            Naše vjenčanje
+        <div class="hero-content">
+
+            <div class="small-title">
+                Naše vjenčanje
+            </div>
+
+            <h1 class="names">
+                Lamija &amp; Nedim
+            </h1>
+
+            <div class="heart-line">
+                <span></span>
+                <div class="heart">♡</div>
+                <span></span>
+            </div>
+
+            <div class="date">
+                10. 10. 2026.
+            </div>
+
+            <p class="welcome">
+                Dobro došli na našu svadbenu galeriju.<br>
+                Podijelite s nama fotografije i videe koje napravite
+                tokom našeg posebnog dana.
+            </p>
+
+            <a
+                href="#galerija"
+                class="btn"
+            >
+                📷 &nbsp; Otvori galeriju
+            </a>
+
+            <div class="arrow">
+                ↓
+            </div>
+
         </div>
-
-        <h1>
-            Lamija <span class="amp">&amp;</span> Nedim
-        </h1>
-
-        <div class="date">
-            10.10.2026.
-        </div>
-
-        <p class="subtitle">
-            Dobro došli na našu svadbenu galeriju.
-            Podijelite s nama fotografije i videe
-            koje napravite tokom našeg posebnog dana.
-        </p>
-
-        <a href="#galerija" class="btn">
-            Pogledaj galeriju
-        </a>
 
     </div>
 
 </div>
 
 
-<!-- GALERIJA -->
+<!-- =========================
+     GALERIJA
+========================= -->
 
 <section id="galerija">
 
 <div class="container">
 
-    <h2>Podijelite uspomenu</h2>
+    <h2 class="section-title">
+        PODIJELITE USPOMENU
+    </h2>
 
     <p class="section-text">
         Odaberite jednu ili više fotografija ili videa sa svog telefona.
     </p>
 
 
-    <!-- UPLOAD -->
-
     <div class="upload">
 
-        <label class="btn" for="photos">
-            📷 Objavi fotografije ili video
+        <label
+            class="btn"
+            for="photos"
+        >
+            📷 &nbsp; Objavi fotografije ili video
         </label>
 
         <input
@@ -449,9 +591,11 @@ footer{
             multiple
         >
 
-        <div class="drop">
+        <div class="upload-info">
             Do 150 fotografija ili videa odjednom ·
             fotografije do 50 MB · videi do 500 MB.
+            <br>
+            JPG, PNG, WEBP, GIF, HEIC, HEIF, MP4, MOV, WEBM i M4V.
         </div>
 
         <div
@@ -462,20 +606,23 @@ footer{
     </div>
 
 
-    <!-- QR KOD
+    <!-- =========================
+         QR KOD
          NE MIJENJATI
-    -->
+    ========================== -->
 
     <div class="qrbox">
 
         <img
-        src="qr.png"
-        alt="QR kod za album"
+            src="qr.png"
+            alt="QR kod za album"
         >
 
         <div class="qrtext">
 
-            <h3>Skeniraj me</h3>
+            <h3>
+                SKENIRAJ ME
+            </h3>
 
             <p>
                 Sačuvajte ovaj QR kod i podijelite ga
@@ -488,22 +635,23 @@ footer{
     </div>
 
 
-    <!-- DOWNLOAD ALL -->
+    <h2 class="section-title">
+        NAŠE USPOMENE
+    </h2>
 
-    <div class="actions">
+
+    <div class="gallery-actions">
 
         <button
             class="btn"
             type="button"
             onclick="openPin('all')"
         >
-            📦 Preuzmi sve
+            📦 &nbsp; Preuzmi sve
         </button>
 
     </div>
 
-
-    <!-- GALLERY -->
 
     <div
         class="gallery"
@@ -526,7 +674,9 @@ footer{
 </footer>
 
 
-<!-- PIN -->
+<!-- =========================
+     PIN MODAL
+========================= -->
 
 <div
     class="modal"
@@ -570,7 +720,9 @@ footer{
 </div>
 
 
-<!-- LIGHTBOX -->
+<!-- =========================
+     LIGHTBOX
+========================= -->
 
 <div
     class="lightbox"
@@ -596,7 +748,7 @@ footer{
             type="button"
             onclick="downloadCurrent()"
         >
-            📥 Preuzmi
+            📥 &nbsp; Preuzmi
         </button>
 
     </div>
@@ -606,13 +758,17 @@ footer{
 
 <script>
 
+/* =========================
+   VARIJABLE
+========================= */
+
 let currentKey = null;
 let downloadType = null;
 
 
-/* ================================
-   PROVJERA VIDEA
-================================ */
+/* =========================
+   VIDEO
+========================= */
 
 function isVideo(name){
 
@@ -632,9 +788,9 @@ function isVideo(name){
 }
 
 
-/* ================================
-   URL ZA FAJL
-================================ */
+/* =========================
+   URL
+========================= */
 
 function makeUrl(key){
 
@@ -654,9 +810,9 @@ function makeUrl(key){
 }
 
 
-/* ================================
-   UČITAJ GALERIJU
-================================ */
+/* =========================
+   UČITAVANJE GALERIJE
+========================= */
 
 async function loadGallery(){
 
@@ -671,7 +827,7 @@ async function loadGallery(){
         if(!response.ok){
 
             throw new Error(
-                "Greška pri učitavanju galerije."
+                "Galerija nije dostupna."
             );
 
         }
@@ -775,10 +931,7 @@ async function loadGallery(){
 
     }catch(error){
 
-        console.error(
-            "Galerija:",
-            error
-        );
+        console.error(error);
 
         gallery.innerHTML =
             '<div class="empty">' +
@@ -790,9 +943,9 @@ async function loadGallery(){
 }
 
 
-/* ================================
+/* =========================
    UPLOAD
-================================ */
+========================= */
 
 document
 .getElementById("photos")
@@ -825,7 +978,7 @@ document
         }
 
 
-        /* PROVJERA VELIČINE */
+        /* veličina */
 
         for(
             let i = 0;
@@ -864,8 +1017,6 @@ document
 
         }
 
-
-        /* FORM DATA */
 
         const formData =
             new FormData();
@@ -930,16 +1081,12 @@ document
 
             this.value = "";
 
-
             await loadGallery();
 
 
         }catch(error){
 
-            console.error(
-                "Upload:",
-                error
-            );
+            console.error(error);
 
             status.textContent =
                 error.message ||
@@ -951,9 +1098,9 @@ document
 );
 
 
-/* ================================
+/* =========================
    LIGHTBOX
-================================ */
+========================= */
 
 function openLightbox(
     key,
@@ -1002,9 +1149,7 @@ function openLightbox(
     }
 
 
-    lightbox.classList.add(
-        "active"
-    );
+    lightbox.classList.add("active");
 
 }
 
@@ -1021,15 +1166,14 @@ function closeLightbox(){
         .innerHTML = "";
 
 
-    currentKey =
-        null;
+    currentKey = null;
 
 }
 
 
-/* ================================
+/* =========================
    DOWNLOAD JEDNOG
-================================ */
+========================= */
 
 function downloadCurrent(){
 
@@ -1045,9 +1189,9 @@ function downloadCurrent(){
 }
 
 
-/* ================================
+/* =========================
    PIN
-================================ */
+========================= */
 
 function openPin(
     type,
@@ -1099,9 +1243,9 @@ function closePin(){
 }
 
 
-/* ================================
+/* =========================
    POTVRDA PINA
-================================ */
+========================= */
 
 async function confirmPin(){
 
@@ -1162,7 +1306,6 @@ async function confirmPin(){
             await fetch(
                 url,
                 {
-                    method:"GET",
                     headers:{
                         "x-admin-pin":pin
                     }
@@ -1227,13 +1370,9 @@ async function confirmPin(){
                 );
 
 
-        document.body.appendChild(
-            link
-        );
-
+        document.body.appendChild(link);
 
         link.click();
-
 
         link.remove();
 
@@ -1255,10 +1394,7 @@ async function confirmPin(){
 
     }catch(error){
 
-        console.error(
-            "Download:",
-            error
-        );
+        console.error(error);
 
         errorBox.textContent =
             error.message ||
@@ -1269,9 +1405,9 @@ async function confirmPin(){
 }
 
 
-/* ================================
-   KLIK VAN MODALA
-================================ */
+/* =========================
+   ZATVARANJE
+========================= */
 
 document
 .getElementById("pinModal")
@@ -1279,12 +1415,8 @@ document
     "click",
     function(event){
 
-        if(
-            event.target === this
-        ){
-
+        if(event.target === this){
             closePin();
-
         }
 
     }
@@ -1297,29 +1429,19 @@ document
     "click",
     function(event){
 
-        if(
-            event.target === this
-        ){
-
+        if(event.target === this){
             closeLightbox();
-
         }
 
     }
 );
 
 
-/* ================================
-   ESC
-================================ */
-
 document.addEventListener(
     "keydown",
     function(event){
 
-        if(
-            event.key === "Escape"
-        ){
+        if(event.key === "Escape"){
 
             closeLightbox();
             closePin();
@@ -1330,9 +1452,9 @@ document.addEventListener(
 );
 
 
-/* ================================
+/* =========================
    START
-================================ */
+========================= */
 
 loadGallery();
 
