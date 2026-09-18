@@ -3,19 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Lamija & Nedim</title>
 
 <style>
 *{
     box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    scroll-behavior:smooth;
 }
 
 body{
-    margin:0;
-    font-family:Georgia,serif;
+    font-family:Georgia,"Times New Roman",serif;
     background:#f6f0e5;
     color:#4a4035;
 }
+
+/* HERO */
 
 .hero{
     min-height:100vh;
@@ -24,16 +32,12 @@ body{
     justify-content:center;
     text-align:center;
     padding:30px 20px;
-    background:linear-gradient(
-        135deg,
-        #fffaf1,
-        #f6f0e5,
-        #eee3d1
-    );
+    background:
+        radial-gradient(circle at top,#fffaf2 0%,#f6f0e5 55%,#eee3d1 100%);
 }
 
 .hero-inner{
-    max-width:850px;
+    max-width:900px;
     width:100%;
 }
 
@@ -42,15 +46,14 @@ body{
     letter-spacing:5px;
     text-transform:uppercase;
     color:#a68a55;
-    margin-bottom:20px;
+    margin-bottom:22px;
 }
 
 h1{
-    margin:0;
-    font-size:clamp(50px,10vw,100px);
+    font-size:clamp(52px,10vw,105px);
     font-weight:normal;
-    line-height:1;
     color:#9b7b42;
+    line-height:1;
 }
 
 .amp{
@@ -65,26 +68,31 @@ h1{
 }
 
 .subtitle{
-    max-width:600px;
     margin:30px auto;
+    max-width:620px;
     font-size:18px;
     line-height:1.7;
 }
 
 .btn{
-    border:0;
+    display:inline-block;
+    padding:14px 25px;
+    border:1px solid #b59a69;
     background:#b59a69;
     color:white;
-    padding:14px 25px;
     border-radius:30px;
-    font-family:Georgia,serif;
-    font-size:16px;
     cursor:pointer;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:16px;
+    text-decoration:none;
+    transition:.2s;
 }
 
 .btn:hover{
     background:#967c4f;
 }
+
+/* SECTION */
 
 section{
     padding:70px 20px;
@@ -100,21 +108,28 @@ h2{
     font-size:34px;
     font-weight:normal;
     color:#9b7b42;
-    margin:0 0 15px;
+    margin-bottom:15px;
 }
 
 .section-text{
     text-align:center;
     margin-bottom:35px;
+    color:#776650;
 }
 
+/* UPLOAD */
+
 .upload{
-    background:rgba(255,255,255,.5);
+    background:rgba(255,255,255,.55);
     border:1px solid #e1d4bd;
     border-radius:20px;
     padding:35px 20px;
     text-align:center;
-    margin-bottom:35px;
+    margin-bottom:50px;
+}
+
+.upload h2{
+    margin-bottom:10px;
 }
 
 .upload p{
@@ -128,8 +143,8 @@ h2{
 .drop{
     margin-top:15px;
     font-size:13px;
-    color:#8a7a65;
     line-height:1.7;
+    color:#8a7a65;
 }
 
 .status{
@@ -138,10 +153,14 @@ h2{
     color:#9b7b42;
 }
 
+/* GALLERY ACTIONS */
+
 .actions{
     text-align:center;
     margin-bottom:35px;
 }
+
+/* GALLERY */
 
 .gallery{
     display:grid;
@@ -166,7 +185,7 @@ h2{
     display:block;
 }
 
-.video-card:after{
+.video-card::after{
     content:"▶";
     position:absolute;
     left:50%;
@@ -175,25 +194,29 @@ h2{
     width:55px;
     height:55px;
     border-radius:50%;
-    background:rgba(0,0,0,.6);
+    background:rgba(0,0,0,.55);
     color:white;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:22px;
+    font-size:21px;
     pointer-events:none;
 }
 
 .empty{
     text-align:center;
     color:#8a7a65;
-    padding:40px 20px;
+    padding:30px;
     grid-column:1/-1;
 }
 
+/* QR
+   OVAJ DIO NE MIJENJATI
+*/
+
 .qrbox{
     max-width:700px;
-    margin:55px auto 0;
+    margin:60px auto 0;
     background:rgba(255,255,255,.55);
     border:1px solid #e1d4bd;
     border-radius:20px;
@@ -217,18 +240,23 @@ h2{
 .qrtext h3{
     color:#9b7b42;
     font-size:27px;
-    margin:0 0 10px;
+    margin-bottom:10px;
 }
 
 .qrtext p{
     line-height:1.6;
 }
 
+/* FOOTER */
+
 footer{
     text-align:center;
     padding:40px 20px;
     color:#8a7a65;
+    font-size:14px;
 }
+
+/* PIN MODAL */
 
 .modal{
     position:fixed;
@@ -257,6 +285,7 @@ footer{
 .modal-box h3{
     color:#9b7b42;
     font-size:28px;
+    margin-bottom:15px;
     font-weight:normal;
 }
 
@@ -269,6 +298,7 @@ footer{
     font-size:18px;
     text-align:center;
     margin:15px 0;
+    outline:none;
 }
 
 .pin-error{
@@ -276,6 +306,8 @@ footer{
     min-height:22px;
     margin-bottom:10px;
 }
+
+/* LIGHTBOX */
 
 .lightbox{
     position:fixed;
@@ -322,7 +354,10 @@ footer{
     color:white;
     font-size:40px;
     cursor:pointer;
+    line-height:1;
 }
+
+/* MOBILE */
 
 @media(max-width:700px){
 
@@ -343,11 +378,17 @@ footer{
     .date{
         font-size:18px;
     }
+
+    .subtitle{
+        font-size:16px;
+    }
 }
 </style>
 </head>
 
 <body>
+
+<!-- POČETNA STRANICA -->
 
 <div class="hero">
 
@@ -366,7 +407,7 @@ footer{
         </div>
 
         <p class="subtitle">
-            Dobro došli na našu svadbenu galeriju.<br>
+            Dobro došli na našu svadbenu galeriju.
             Podijelite s nama fotografije i videe
             koje napravite tokom našeg posebnog dana.
         </p>
@@ -380,6 +421,8 @@ footer{
 </div>
 
 
+<!-- GALERIJA -->
+
 <section id="galerija">
 
 <div class="container">
@@ -389,6 +432,9 @@ footer{
     <p class="section-text">
         Odaberite jednu ili više fotografija ili videa sa svog telefona.
     </p>
+
+
+    <!-- UPLOAD -->
 
     <div class="upload">
 
@@ -404,9 +450,8 @@ footer{
         >
 
         <div class="drop">
-            Do 150 fajlova odjednom · fotografije do 50 MB · videi do 500 MB.
-            <br>
-            JPG, PNG, WEBP, GIF, HEIC, HEIF, MP4, MOV, WEBM i M4V.
+            Do 150 fotografija ili videa odjednom ·
+            fotografije do 50 MB · videi do 500 MB.
         </div>
 
         <div
@@ -417,13 +462,15 @@ footer{
     </div>
 
 
-    <!-- QR KOD - NE MIJENJATI -->
+    <!-- QR KOD
+         NE MIJENJATI
+    -->
 
     <div class="qrbox">
 
         <img
-            src="qr.png"
-            alt="QR kod za album"
+        src="qr.png"
+        alt="QR kod za album"
         >
 
         <div class="qrtext">
@@ -441,10 +488,7 @@ footer{
     </div>
 
 
-    <br><br>
-
-
-    <h2>Naše uspomene</h2>
+    <!-- DOWNLOAD ALL -->
 
     <div class="actions">
 
@@ -458,6 +502,8 @@ footer{
 
     </div>
 
+
+    <!-- GALLERY -->
 
     <div
         class="gallery"
@@ -489,7 +535,9 @@ footer{
 
     <div class="modal-box">
 
-        <h3>Preuzimanje fotografija</h3>
+        <h3>
+            Preuzimanje fotografija
+        </h3>
 
         <p>
             Unesite PIN za preuzimanje.
@@ -562,40 +610,53 @@ let currentKey = null;
 let downloadType = null;
 
 
-/* VIDEO */
+/* ================================
+   PROVJERA VIDEA
+================================ */
 
 function isVideo(name){
 
-    if(!name) return false;
+    if(!name){
+        return false;
+    }
 
-    const n = name.toLowerCase();
+    const value =
+        name.toLowerCase();
 
     return (
-        n.endsWith(".mp4") ||
-        n.endsWith(".mov") ||
-        n.endsWith(".webm") ||
-        n.endsWith(".m4v")
+        value.endsWith(".mp4") ||
+        value.endsWith(".mov") ||
+        value.endsWith(".webm") ||
+        value.endsWith(".m4v")
     );
 }
 
 
-/* URL */
+/* ================================
+   URL ZA FAJL
+================================ */
 
 function makeUrl(key){
 
-    if(!key) return "";
+    if(!key){
+        return "";
+    }
 
     return "/uploads/" +
         key
         .split("/")
         .map(function(part){
+
             return encodeURIComponent(part);
+
         })
         .join("/");
 }
 
 
-/* GALERIJA */
+/* ================================
+   UČITAJ GALERIJU
+================================ */
 
 async function loadGallery(){
 
@@ -608,7 +669,11 @@ async function loadGallery(){
             await fetch("/api/photos");
 
         if(!response.ok){
-            throw new Error("Galerija nije dostupna.");
+
+            throw new Error(
+                "Greška pri učitavanju galerije."
+            );
+
         }
 
         const data =
@@ -620,6 +685,7 @@ async function loadGallery(){
                 : (data.photos || []);
 
         gallery.innerHTML = "";
+
 
         if(photos.length === 0){
 
@@ -651,6 +717,7 @@ async function loadGallery(){
             const video =
                 isVideo(name);
 
+
             const card =
                 document.createElement("div");
 
@@ -666,9 +733,9 @@ async function loadGallery(){
                     document.createElement("video");
 
                 element.src = url;
+                element.preload = "metadata";
                 element.muted = true;
                 element.playsInline = true;
-                element.preload = "metadata";
 
                 card.appendChild(element);
 
@@ -686,16 +753,19 @@ async function loadGallery(){
             }
 
 
-            card.onclick = function(){
+            card.addEventListener(
+                "click",
+                function(){
 
-                openLightbox(
-                    key,
-                    url,
-                    name,
-                    video
-                );
+                    openLightbox(
+                        key,
+                        url,
+                        name,
+                        video
+                    );
 
-            };
+                }
+            );
 
 
             gallery.appendChild(card);
@@ -705,7 +775,10 @@ async function loadGallery(){
 
     }catch(error){
 
-        console.error(error);
+        console.error(
+            "Galerija:",
+            error
+        );
 
         gallery.innerHTML =
             '<div class="empty">' +
@@ -717,7 +790,9 @@ async function loadGallery(){
 }
 
 
-/* UPLOAD */
+/* ================================
+   UPLOAD
+================================ */
 
 document
 .getElementById("photos")
@@ -726,7 +801,9 @@ document
     async function(){
 
         const files =
-            Array.from(this.files || []);
+            Array.from(
+                this.files || []
+            );
 
         const status =
             document.getElementById("status");
@@ -740,7 +817,7 @@ document
         if(files.length > 150){
 
             status.textContent =
-                "Najviše 150 fajlova odjednom.";
+                "Možete odabrati najviše 150 fajlova odjednom.";
 
             this.value = "";
 
@@ -748,9 +825,16 @@ document
         }
 
 
-        for(let i=0;i<files.length;i++){
+        /* PROVJERA VELIČINE */
 
-            const file = files[i];
+        for(
+            let i = 0;
+            i < files.length;
+            i++
+        ){
+
+            const file =
+                files[i];
 
             const video =
                 file.type.startsWith("video/") ||
@@ -766,8 +850,12 @@ document
 
                 status.textContent =
                     video
-                    ? "Video " + file.name + " je veći od 500 MB."
-                    : "Fotografija " + file.name + " je veća od 50 MB.";
+                        ? "Video " +
+                          file.name +
+                          " je veći od 500 MB."
+                        : "Fotografija " +
+                          file.name +
+                          " je veća od 50 MB.";
 
                 this.value = "";
 
@@ -777,13 +865,15 @@ document
         }
 
 
-        const form =
+        /* FORM DATA */
+
+        const formData =
             new FormData();
 
 
         files.forEach(function(file){
 
-            form.append(
+            formData.append(
                 "photos",
                 file
             );
@@ -792,7 +882,9 @@ document
 
 
         status.textContent =
-            "Šaljem " + files.length + " fajlova...";
+            "Šaljem " +
+            files.length +
+            " fajlova...";
 
 
         try{
@@ -802,13 +894,19 @@ document
                     "/api/upload",
                     {
                         method:"POST",
-                        body:form
+                        body:formData
                     }
                 );
 
 
-            const data =
-                await response.json();
+            let data = {};
+
+            try{
+
+                data =
+                    await response.json();
+
+            }catch(e){}
 
 
             if(!response.ok){
@@ -823,18 +921,25 @@ document
 
             status.textContent =
                 "Uspješno poslano: " +
-                (data.uploaded || files.length) +
+                (
+                    data.uploaded ||
+                    files.length
+                ) +
                 " fajlova.";
 
 
             this.value = "";
+
 
             await loadGallery();
 
 
         }catch(error){
 
-            console.error(error);
+            console.error(
+                "Upload:",
+                error
+            );
 
             status.textContent =
                 error.message ||
@@ -846,7 +951,9 @@ document
 );
 
 
-/* LIGHTBOX */
+/* ================================
+   LIGHTBOX
+================================ */
 
 function openLightbox(
     key,
@@ -855,9 +962,11 @@ function openLightbox(
     video
 ){
 
-    currentKey = key;
+    currentKey =
+        key;
 
-    const box =
+
+    const lightbox =
         document.getElementById("lightbox");
 
     const media =
@@ -885,14 +994,17 @@ function openLightbox(
             document.createElement("img");
 
         element.src = url;
-        element.alt = name || "Uspomena";
+        element.alt =
+            name || "Uspomena";
 
         media.appendChild(element);
 
     }
 
 
-    box.classList.add("active");
+    lightbox.classList.add(
+        "active"
+    );
 
 }
 
@@ -903,16 +1015,21 @@ function closeLightbox(){
         .getElementById("lightbox")
         .classList.remove("active");
 
+
     document
         .getElementById("lightboxMedia")
         .innerHTML = "";
 
-    currentKey = null;
+
+    currentKey =
+        null;
 
 }
 
 
-/* DOWNLOAD JEDNOG */
+/* ================================
+   DOWNLOAD JEDNOG
+================================ */
 
 function downloadCurrent(){
 
@@ -928,38 +1045,74 @@ function downloadCurrent(){
 }
 
 
-/* PIN */
+/* ================================
+   PIN
+================================ */
 
 function openPin(
     type,
     key
 ){
 
-    downloadType = type;
-    currentKey = key || null;
+    downloadType =
+        type;
+
+    currentKey =
+        key || null;
+
 
     document
         .getElementById("pin")
         .value = "";
 
+
     document
         .getElementById("pinError")
         .textContent = "";
+
 
     document
         .getElementById("pinModal")
         .classList.add("active");
 
+
+    setTimeout(
+        function(){
+
+            document
+                .getElementById("pin")
+                .focus();
+
+        },
+        100
+    );
+
 }
 
+
+function closePin(){
+
+    document
+        .getElementById("pinModal")
+        .classList.remove("active");
+
+}
+
+
+/* ================================
+   POTVRDA PINA
+================================ */
 
 async function confirmPin(){
 
     const pin =
-        document.getElementById("pin").value;
+        document
+            .getElementById("pin")
+            .value;
 
     const errorBox =
-        document.getElementById("pinError");
+        document
+            .getElementById("pinError");
 
 
     if(!pin){
@@ -995,9 +1148,12 @@ async function confirmPin(){
 
             }
 
+
             url =
                 "/api/download?key=" +
-                encodeURIComponent(currentKey);
+                encodeURIComponent(
+                    currentKey
+                );
 
         }
 
@@ -1006,6 +1162,7 @@ async function confirmPin(){
             await fetch(
                 url,
                 {
+                    method:"GET",
                     headers:{
                         "x-admin-pin":pin
                     }
@@ -1016,7 +1173,7 @@ async function confirmPin(){
         if(!response.ok){
 
             let message =
-                "Pogrešan PIN ili greška.";
+                "Pogrešan PIN ili greška pri preuzimanju.";
 
             try{
 
@@ -1024,12 +1181,18 @@ async function confirmPin(){
                     await response.json();
 
                 if(data.error){
-                    message = data.error;
+
+                    message =
+                        data.error;
+
                 }
 
             }catch(e){}
 
-            throw new Error(message);
+
+            throw new Error(
+                message
+            );
 
         }
 
@@ -1038,35 +1201,50 @@ async function confirmPin(){
             await response.blob();
 
 
-        const downloadUrl =
-            URL.createObjectURL(blob);
+        const objectUrl =
+            URL.createObjectURL(
+                blob
+            );
 
 
         const link =
             document.createElement("a");
 
-        link.href = downloadUrl;
+
+        link.href =
+            objectUrl;
+
 
         link.download =
             downloadType === "all"
                 ? "lamija-nedim-fotografije.zip"
                 : (
                     currentKey
-                    ? currentKey.split("/").pop()
-                    : "uspomena"
+                        ? currentKey
+                            .split("/")
+                            .pop()
+                        : "uspomena"
                 );
 
 
-        document.body.appendChild(link);
+        document.body.appendChild(
+            link
+        );
+
 
         link.click();
+
 
         link.remove();
 
 
         setTimeout(
             function(){
-                URL.revokeObjectURL(downloadUrl);
+
+                URL.revokeObjectURL(
+                    objectUrl
+                );
+
             },
             1000
         );
@@ -1077,7 +1255,10 @@ async function confirmPin(){
 
     }catch(error){
 
-        console.error(error);
+        console.error(
+            "Download:",
+            error
+        );
 
         errorBox.textContent =
             error.message ||
@@ -1088,22 +1269,57 @@ async function confirmPin(){
 }
 
 
-function closePin(){
+/* ================================
+   KLIK VAN MODALA
+================================ */
 
-    document
-        .getElementById("pinModal")
-        .classList.remove("active");
+document
+.getElementById("pinModal")
+.addEventListener(
+    "click",
+    function(event){
 
-}
+        if(
+            event.target === this
+        ){
+
+            closePin();
+
+        }
+
+    }
+);
 
 
-/* ESC */
+document
+.getElementById("lightbox")
+.addEventListener(
+    "click",
+    function(event){
+
+        if(
+            event.target === this
+        ){
+
+            closeLightbox();
+
+        }
+
+    }
+);
+
+
+/* ================================
+   ESC
+================================ */
 
 document.addEventListener(
     "keydown",
     function(event){
 
-        if(event.key === "Escape"){
+        if(
+            event.key === "Escape"
+        ){
 
             closeLightbox();
             closePin();
@@ -1114,7 +1330,9 @@ document.addEventListener(
 );
 
 
-/* START */
+/* ================================
+   START
+================================ */
 
 loadGallery();
 
