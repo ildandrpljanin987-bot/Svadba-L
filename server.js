@@ -1,378 +1,795 @@
 const express = require('express');
 const multer = require('multer');
 const crypto = require('crypto');
+const path = require('path');
+const { PassThrough } = require('stream');
+const archiver = require('archiver');
 
 const {
   S3Client,
+  ListObjectsV2Command,
   GetObjectCommand,
-  PutObjectCommand,
-  DeleteObjectCommand,
-  ListObjectsV2Command
+  DeleteObjectCommand
 } = require('@aws-sdk/client-s3');
+
+const { Upload } = require('@aws-sdk/lib-storage');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 const BUCKET = process.env.BUCKET;
-const REGION = process.env.REGION || 'auto';
+const REGION = process.env.REGION || 'us-west-1';
 const ENDPOINT = process.env.ENDPOINT;
 const ACCESS_KEY_ID = process.env.ACCESS_KEY_ID;
 const SECRET_ACCESS_KEY = process.env.SECRET_ACCESS_KEY;
 
 const ADMIN_PIN = process.env.ADMIN_PIN || '1010';
 
-if (!BUCKET || !ENDPOINT || !ACCESS_KEY_ID || !SECRET_ACCESS_KEY) {
-  console.error('Nedostaju Railway Bucket varijable.');
-  process.exit(1);
-}
-
 const s3 = new S3Client({
   region: REGION,
   endpoint: ENDPOINT,
-  forcePathStyle: false,
   credentials: {
     accessKeyId: ACCESS_KEY_ID,
     secretAccessKey: SECRET_ACCESS_KEY
-  }
+  },
+  forcePathStyle: true
 });
 
-const storage = multer.memoryStorage();
 
-const upload = multer({
-  storage,
+// ===============================
+// UPLOAD STORAGE
+// ===============================
 
-  limits: {
-    files: 150,
-    fileSize: 50 * 1024 * 1024
+const storage = {
+
+  _handleFile(req, file, cb) {
+
+    const ext =
+      path.extname(file.originalname).toLowerCase() || '.jpg';
+
+    const key =
+      `photos/${Date.now()}-${crypto
+        .randomBytes(6)
+        .toString('hex')}${ext}`;
+
+    const pass = new PassThrough();
+
+    const upload = new Upload({
+      client: s3,
+
+      params: {
+        Bucket: BUCKET,
+        Key: key,
+        Body: pass,
+        ContentType:
+          file.mimetype || 'application/octet-stream'
+      }
+    });
+
+    file.stream.pipe(pass);
+
+    upload.done()
+      .then(() => {
+
+        cb(null, {
+          key: key
+        });
+
+      })
+      .catch(err => {
+
+        console.error(err);
+        cb(err);
+
+      });
+
   },
 
-  fileFilter: (_, file, cb) => {
-    const allowed = /^image\/(jpeg|png|webp|gif|heic|heif)$/i.test(
-      file.mimetype
-    );
+  _removeFile(req, file, cb) {
+
+    if (!file.key) {
+      return cb(null);
+    }
+
+    s3.send(
+      new DeleteObjectCommand({
+        Bucket: BUCKET,
+        Key: file.key
+      })
+    )
+      .then(() => cb(null))
+      .catch(cb);
+
+  }
+
+};
+
+
+// ===============================
+// MULTER
+// ===============================
+
+const upload = multer({
+
+  storage: storage,
+
+  limits: {
+
+    files: 150,
+
+    fileSize:
+      50 * 1024 * 1024
+
+  },
+
+  fileFilter: (req, file, cb) => {
+
+    const allowed =
+      /^image\/(jpeg|png|webp|gif|heic|heif)$/i
+        .test(file.mimetype);
 
     cb(null, allowed);
+
   }
+
 });
+
 
 app.use(express.json());
 
-app.use(express.static(__dirname + '/Public'));
+app.use(
+  express.static(
+    path.join(__dirname, 'Public')
+  )
+);
 
-/*
-  Čitanje fotografije iz privatnog Railway Bucketa
-*/
-app.get('/uploads/*', async (req, res) => {
-  const key = req.params[0];
 
-  if (!key || !key.startsWith('photos/')) {
-    return res.status(404).end();
+// ===============================
+// PIN PROVJERA
+// ===============================
+
+function checkPin(req, res) {
+
+  if (
+    req.headers['x-admin-pin'] !== ADMIN_PIN
+  ) {
+
+    res.status(403).json({
+
+      ok: false,
+
+      error: 'Pogrešan PIN.'
+
+    });
+
+    return false;
+
   }
 
-  try {
-    const result = await s3.send(
-      new GetObjectCommand({
-        Bucket: BUCKET,
-        Key: key
-      })
-    );
+  return true;
 
-    if (result.ContentType) {
-      res.setHeader('Content-Type', result.ContentType);
-    }
-
-    if (result.ContentLength) {
-      res.setHeader('Content-Length', result.ContentLength);
-    }
-
-    res.setHeader(
-      'Cache-Control',
-      'public, max-age=31536000, immutable'
-    );
-
-    result.Body.pipe(res);
-
-  } catch (error) {
-    console.error('Greška pri čitanju fotografije:', error);
-    res.status(404).end();
-  }
-});
-
-
-/*
-  Učitavanje svih fotografija iz Bucketa
-*/
-async function listPhotos() {
-  const photos = [];
-  let continuationToken;
-
-  do {
-    const result = await s3.send(
-      new ListObjectsV2Command({
-        Bucket: BUCKET,
-        Prefix: 'photos/',
-        ContinuationToken: continuationToken
-      })
-    );
-
-    for (const object of result.Contents || []) {
-      if (!object.Key || object.Key.endsWith('/')) continue;
-
-      const encodedId = Buffer
-        .from(object.Key, 'utf8')
-        .toString('base64url');
-
-      photos.push({
-        id: encodedId,
-        file: object.Key,
-        originalName: object.Key,
-        createdAt: object.LastModified
-          ? new Date(object.LastModified).getTime()
-          : 0
-      });
-    }
-
-    continuationToken = result.IsTruncated
-      ? result.NextContinuationToken
-      : undefined;
-
-  } while (continuationToken);
-
-  return photos.sort(
-    (a, b) => b.createdAt - a.createdAt
-  );
 }
 
 
-/*
-  API - galerija
-*/
-app.get('/api/photos', async (req, res) => {
-  try {
-    const photos = await listPhotos();
+// ===============================
+// LISTA SVIH FOTOGRAFIJA
+// ===============================
 
-    res.json(photos);
+async function listAllPhotos() {
 
-  } catch (error) {
-    console.error(
-      'Greška pri učitavanju galerije:',
-      error
-    );
+  const photos = [];
 
-    res.status(500).json({
-      ok: false,
-      error: 'Galerija trenutno nije dostupna.'
-    });
+  let token;
+
+  do {
+
+    const result =
+      await s3.send(
+
+        new ListObjectsV2Command({
+
+          Bucket: BUCKET,
+
+          Prefix: 'photos/',
+
+          ContinuationToken: token
+
+        })
+
+      );
+
+
+    for (
+      const obj of
+      result.Contents || []
+    ) {
+
+      if (
+        !obj.Key ||
+        obj.Key.endsWith('/')
+      ) {
+
+        continue;
+
+      }
+
+
+      photos.push({
+
+        id: obj.Key,
+
+        file: obj.Key,
+
+        originalName:
+          obj.Key.split('/').pop(),
+
+        size:
+          obj.Size || 0,
+
+        createdAt:
+          obj.LastModified
+            ? new Date(
+                obj.LastModified
+              ).getTime()
+            : 0
+
+      });
+
+    }
+
+
+    token =
+      result.IsTruncated
+        ? result.NextContinuationToken
+        : undefined;
+
   }
-});
+
+  while (token);
 
 
-/*
-  API - upload fotografija
+  return photos.sort(
+    (a, b) =>
+      b.createdAt - a.createdAt
+  );
 
-  Maksimalno:
-  150 fotografija
-  50 MB po fotografiji
-*/
-app.post(
-  '/api/upload',
-  upload.array('photos', 150),
+}
+
+
+// ===============================
+// GALERIJA
+// ===============================
+
+app.get(
+  '/api/photos',
   async (req, res) => {
 
     try {
-      const files = req.files || [];
 
-      const added = [];
+      const photos =
+        await listAllPhotos();
 
-      for (const file of files) {
+      res.json(photos);
 
-        const extension =
-          getExtension(
-            file.originalname,
-            file.mimetype
-          );
+    }
 
-        const key =
-          `photos/${Date.now()}-${crypto.randomBytes(8).toString('hex')}${extension}`;
+    catch (error) {
 
-        await s3.send(
-          new PutObjectCommand({
-            Bucket: BUCKET,
-            Key: key,
-            Body: file.buffer,
-            ContentType: file.mimetype,
-            CacheControl:
-              'public, max-age=31536000, immutable'
-          })
-        );
-
-        const id =
-          Buffer
-            .from(key, 'utf8')
-            .toString('base64url');
-
-        added.push({
-          id,
-          file: key,
-          originalName: file.originalname,
-          createdAt: Date.now()
-        });
-      }
-
-      res.json({
-        ok: true,
-        photos: added
-      });
-
-    } catch (error) {
-
-      console.error(
-        'Greška pri uploadu:',
-        error
-      );
+      console.error(error);
 
       res.status(500).json({
+
         ok: false,
-        error: 'Upload nije uspio.'
+
+        error:
+          'Galerija trenutno nije dostupna.'
+
       });
+
     }
+
   }
 );
 
 
-/*
-  Brisanje fotografije
-*/
-app.delete(
-  '/api/photos/:id',
+// ===============================
+// UPLOAD FOTOGRAFIJA
+// ===============================
+
+app.post(
+  '/api/upload',
+  (req, res) => {
+
+    upload.array(
+      'photos',
+      150
+    )(req, res, async error => {
+
+      if (error) {
+
+        console.error(error);
+
+
+        if (
+          error.code ===
+          'LIMIT_FILE_SIZE'
+        ) {
+
+          return res
+            .status(400)
+            .json({
+
+              ok: false,
+
+              error:
+                'Jedna fotografija je veća od 50 MB.'
+
+            });
+
+        }
+
+
+        if (
+          error.code ===
+          'LIMIT_FILE_COUNT'
+        ) {
+
+          return res
+            .status(400)
+            .json({
+
+              ok: false,
+
+              error:
+                'Možete objaviti najviše 150 fotografija odjednom.'
+
+            });
+
+        }
+
+
+        return res
+          .status(400)
+          .json({
+
+            ok: false,
+
+            error:
+              'Fotografije nisu uspješno objavljene.'
+
+          });
+
+      }
+
+
+      const photos =
+        (req.files || [])
+          .map(file => ({
+
+            id: file.key,
+
+            file: file.key,
+
+            originalName:
+              file.originalname,
+
+            createdAt:
+              Date.now()
+
+          }));
+
+
+      res.json({
+
+        ok: true,
+
+        photos: photos
+
+      });
+
+    });
+
+  }
+);
+
+
+// ===============================
+// PRIKAZ FOTOGRAFIJE
+// ===============================
+
+app.get(
+  '/uploads/:folder/:filename',
   async (req, res) => {
 
     if (
-      req.headers['x-admin-pin'] !==
-      ADMIN_PIN
+      req.params.folder !==
+      'photos'
     ) {
-      return res.status(403).json({
-        ok: false,
-        error: 'Pogrešan PIN.'
-      });
+
+      return res
+        .status(404)
+        .end();
+
     }
+
+
+    const key =
+      `photos/${req.params.filename}`;
+
 
     try {
 
-      const key =
-        Buffer
-          .from(
-            req.params.id,
-            'base64url'
-          )
-          .toString('utf8');
+      const result =
+        await s3.send(
 
-      if (!key.startsWith('photos/')) {
-        return res.status(400).json({
-          ok: false,
-          error: 'Neispravan ID.'
-        });
+          new GetObjectCommand({
+
+            Bucket: BUCKET,
+
+            Key: key
+
+          })
+
+        );
+
+
+      if (result.ContentType) {
+
+        res.setHeader(
+          'Content-Type',
+          result.ContentType
+        );
+
       }
 
-      await s3.send(
-        new DeleteObjectCommand({
-          Bucket: BUCKET,
-          Key: key
-        })
+
+      res.setHeader(
+        'Cache-Control',
+        'public, max-age=31536000'
       );
 
-      res.json({
-        ok: true
-      });
 
-    } catch (error) {
+      result.Body.pipe(res);
+
+    }
+
+    catch (error) {
+
+      console.error(error);
+
+      res
+        .status(404)
+        .end();
+
+    }
+
+  }
+);
+
+
+// ===============================
+// PREUZMI JEDNU FOTOGRAFIJU
+// ===============================
+
+app.get(
+  '/api/download',
+  async (req, res) => {
+
+    if (!checkPin(req, res)) {
+      return;
+    }
+
+
+    const key =
+      String(req.query.key || '');
+
+
+    if (
+      !key.startsWith('photos/') ||
+      key.includes('..')
+    ) {
+
+      return res
+        .status(400)
+        .json({
+
+          ok: false,
+
+          error:
+            'Neispravna fotografija.'
+
+        });
+
+    }
+
+
+    try {
+
+      const result =
+        await s3.send(
+
+          new GetObjectCommand({
+
+            Bucket: BUCKET,
+
+            Key: key
+
+          })
+
+        );
+
+
+      const filename =
+        key.split('/').pop() ||
+        'fotografija.jpg';
+
+
+      res.setHeader(
+        'Content-Type',
+        result.ContentType ||
+          'application/octet-stream'
+      );
+
+
+      res.setHeader(
+        'Content-Disposition',
+        `attachment; filename="${filename
+          .replace(
+            /[^a-zA-Z0-9._-]/g,
+            '_'
+          )}"`
+      );
+
+
+      result.Body.pipe(res);
+
+    }
+
+    catch (error) {
+
+      console.error(error);
+
+      res
+        .status(404)
+        .json({
+
+          ok: false,
+
+          error:
+            'Fotografija nije pronađena.'
+
+        });
+
+    }
+
+  }
+);
+
+
+// ===============================
+// PREUZMI SVE - ZIP
+// ===============================
+
+app.get(
+  '/api/download-all',
+  async (req, res) => {
+
+    if (!checkPin(req, res)) {
+      return;
+    }
+
+
+    try {
+
+      const photos =
+        await listAllPhotos();
+
+
+      if (!photos.length) {
+
+        return res
+          .status(404)
+          .json({
+
+            ok: false,
+
+            error:
+              'Nema fotografija za preuzimanje.'
+
+          });
+
+      }
+
+
+      res.setHeader(
+        'Content-Type',
+        'application/zip'
+      );
+
+
+      res.setHeader(
+        'Content-Disposition',
+        'attachment; filename="lamija-nedim-fotografije.zip"'
+      );
+
+
+      const archive =
+        archiver(
+          'zip',
+          {
+            zlib: {
+              level: 0
+            }
+          }
+        );
+
+
+      archive.on(
+        'error',
+        error => {
+
+          console.error(
+            'ZIP error:',
+            error
+          );
+
+          res.destroy(error);
+
+        }
+      );
+
+
+      archive.pipe(res);
+
+
+      const usedNames =
+        new Map();
+
+
+      for (
+        const photo of photos
+      ) {
+
+        const result =
+          await s3.send(
+
+            new GetObjectCommand({
+
+              Bucket: BUCKET,
+
+              Key: photo.file
+
+            })
+
+          );
+
+
+        let filename =
+          photo.originalName ||
+          photo.file.split('/').pop() ||
+          'fotografija.jpg';
+
+
+        filename =
+          filename.replace(
+            /[\/\\:*?"<>|]/g,
+            '_'
+          );
+
+
+        const match =
+          filename.match(
+            /(\.[^.]+)$/
+          );
+
+
+        const ext =
+          match ? match[1] : '';
+
+
+        const base =
+          filename.replace(
+            /(\.[^.]+)$/,
+            ''
+          );
+
+
+        const number =
+          (usedNames.get(filename) || 0)
+          + 1;
+
+
+        usedNames.set(
+          filename,
+          number
+        );
+
+
+        if (number > 1) {
+
+          filename =
+            `${base}-${number}${ext}`;
+
+        }
+
+
+        archive.append(
+          result.Body,
+          {
+            name: filename
+          }
+        );
+
+
+        await new Promise(
+          (resolve, reject) => {
+
+            result.Body.once(
+              'end',
+              resolve
+            );
+
+            result.Body.once(
+              'error',
+              reject
+            );
+
+          }
+        );
+
+      }
+
+
+      await archive.finalize();
+
+    }
+
+    catch (error) {
 
       console.error(
-        'Greška pri brisanju:',
+        'Download-all error:',
         error
       );
 
-      res.status(500).json({
-        ok: false,
-        error: 'Brisanje nije uspjelo.'
-      });
+
+      if (!res.headersSent) {
+
+        res
+          .status(500)
+          .json({
+
+            ok: false,
+
+            error:
+              'ZIP nije moguće napraviti.'
+
+          });
+
+      }
+
+      else {
+
+        res.destroy(error);
+
+      }
+
     }
+
   }
 );
 
 
-/*
-  Greške Multer-a
-*/
-app.use(
-  (error, req, res, next) => {
-
-    if (error instanceof multer.MulterError) {
-
-      if (error.code === 'LIMIT_FILE_SIZE') {
-        return res.status(400).json({
-          ok: false,
-          error:
-            'Jedna fotografija je veća od 50 MB.'
-        });
-      }
-
-      if (error.code === 'LIMIT_FILE_COUNT') {
-        return res.status(400).json({
-          ok: false,
-          error:
-            'Možete poslati najviše 150 fotografija odjednom.'
-        });
-      }
-
-      return res.status(400).json({
-        ok: false,
-        error: 'Upload nije dozvoljen.'
-      });
-    }
-
-    console.error(error);
-
-    res.status(500).json({
-      ok: false,
-      error: 'Došlo je do greške.'
-    });
-  }
-);
-
-
-function getExtension(
-  originalName,
-  mimeType
-) {
-
-  const match =
-    String(originalName || '')
-      .toLowerCase()
-      .match(/\.[a-z0-9]+$/);
-
-  if (match) {
-    return match[0];
-  }
-
-  const extensions = {
-    'image/jpeg': '.jpg',
-    'image/png': '.png',
-    'image/webp': '.webp',
-    'image/gif': '.gif',
-    'image/heic': '.heic',
-    'image/heif': '.heif'
-  };
-
-  return extensions[mimeType] || '.jpg';
-}
-
+// ===============================
+// POKRETANJE SERVERA
+// ===============================
 
 app.listen(
   PORT,
   () => {
+
     console.log(
       `Galerija radi na http://localhost:${PORT}`
     );
+
   }
 );
