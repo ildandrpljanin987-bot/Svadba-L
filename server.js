@@ -114,9 +114,9 @@ const storage = {
       safeName;
 
     const pass = new PassThrough();
-    const limited = createLimitedStream(file, limit);
+const limited = createLimitedStream(file, limit);
 
-    limited.pipe(pass);
+file.stream.pipe(limited).pipe(pass);
 
     const upload = new Upload({
       client: s3,
